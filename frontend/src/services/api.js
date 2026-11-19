@@ -48,28 +48,34 @@ export const authAPI = {
   toggleWishlist: (productId) => api.post('/auth/wishlist/toggle', { productId })
 };
 
+const shouldTryHttp = Boolean(import.meta.env.VITE_API_URL || import.meta.env.DEV);
+
 // Saree Product APIs with Resilient Handloom Catalog Fallback
 export const productAPI = {
   getAll: async (params = {}) => {
-    try {
-      const res = await api.get('/products', { params });
-      if (res && res.success && Array.isArray(res.products) && res.products.length > 0) {
-        return res;
+    if (shouldTryHttp) {
+      try {
+        const res = await api.get('/products', { params });
+        if (res && res.success && Array.isArray(res.products) && res.products.length > 0) {
+          return res;
+        }
+      } catch (err) {
+        // Fallback to client catalog
       }
-    } catch (err) {
-      // API unreachable or 404 on static hosts like Vercel - seamlessly serve client catalog
     }
     return filterCatalogSarees(params);
   },
 
   getByIdOrSlug: async (idOrSlug) => {
-    try {
-      const res = await api.get(`/products/${idOrSlug}`);
-      if (res && (res.product || res.success)) {
-        return res;
+    if (shouldTryHttp) {
+      try {
+        const res = await api.get(`/products/${idOrSlug}`);
+        if (res && (res.product || res.success)) {
+          return res;
+        }
+      } catch (err) {
+        // Fallback to client catalog
       }
-    } catch (err) {
-      // Fallback to local catalog
     }
     const found = getCatalogSareeByIdOrSlug(idOrSlug);
     if (found) {
@@ -79,34 +85,42 @@ export const productAPI = {
   },
 
   getFeatured: async () => {
-    try {
-      const res = await api.get('/products/filter/featured');
-      if (res && res.products && res.products.length > 0) return res;
-    } catch (e) {}
+    if (shouldTryHttp) {
+      try {
+        const res = await api.get('/products/filter/featured');
+        if (res && res.products && res.products.length > 0) return res;
+      } catch (e) {}
+    }
     return filterCatalogSarees({ isFeatured: true, limit: 8 });
   },
 
   getBestSellers: async () => {
-    try {
-      const res = await api.get('/products/filter/bestsellers');
-      if (res && res.products && res.products.length > 0) return res;
-    } catch (e) {}
+    if (shouldTryHttp) {
+      try {
+        const res = await api.get('/products/filter/bestsellers');
+        if (res && res.products && res.products.length > 0) return res;
+      } catch (e) {}
+    }
     return filterCatalogSarees({ isBestSeller: true, limit: 8 });
   },
 
   getFestivalSpecials: async () => {
-    try {
-      const res = await api.get('/products/filter/festivalspecial');
-      if (res && res.products && res.products.length > 0) return res;
-    } catch (e) {}
+    if (shouldTryHttp) {
+      try {
+        const res = await api.get('/products/filter/festivalspecial');
+        if (res && res.products && res.products.length > 0) return res;
+      } catch (e) {}
+    }
     return filterCatalogSarees({ isFestivalSpecial: true, limit: 8 });
   },
 
   getNewArrivals: async () => {
-    try {
-      const res = await api.get('/products/filter/new-arrivals');
-      if (res && res.products && res.products.length > 0) return res;
-    } catch (e) {}
+    if (shouldTryHttp) {
+      try {
+        const res = await api.get('/products/filter/new-arrivals');
+        if (res && res.products && res.products.length > 0) return res;
+      } catch (e) {}
+    }
     return filterCatalogSarees({ sort: 'newest', limit: 8 });
   },
 

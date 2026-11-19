@@ -1171,7 +1171,7 @@ export const allCategoriesCatalog = [
  */
 export const canonicalCategory = (raw) => {
   if (!raw) return 'All';
-  const clean = String(raw).trim().toLowerCase().replace(/-/g, ' ');
+  const clean = String(raw).trim().toLowerCase().replace(/\+/g, ' ').replace(/-/g, ' ');
   if (!clean || clean === 'all') return 'All';
   if (clean.includes('kanjivaram') || clean.includes('kanchi') || clean.includes('pattu')) return 'Kanjivaram Sarees';
   if (clean.includes('banarasi') || clean.includes('varanasi') || clean.includes('katan') || clean.includes('kadwa')) return 'Banarasi Sarees';
@@ -1190,7 +1190,32 @@ export const canonicalCategory = (raw) => {
 export const filterCatalogSarees = (params = {}) => {
   let list = [...allSareesCatalog];
 
-  // 1. Keyword search (name, description, category, ingredients, slug)
+  // 1. Category filter with canonical normalization
+  if (params.category && params.category !== 'All') {
+    const targetCat = canonicalCategory(params.category).toLowerCase();
+    list = list.filter(p => {
+      const pCat = p.category?.toLowerCase() || '';
+      return pCat === targetCat || 
+             pCat.includes(targetCat.replace(' sarees', '')) || 
+             targetCat.includes(pCat.replace(' sarees', ''));
+    });
+  }
+
+  // 2. SubCollection search / filter with token matching and graceful fallback
+  if (params.subCollection && String(params.subCollection).trim()) {
+    const rawSub = String(params.subCollection).trim().toLowerCase().replace(/\+/g, ' ').replace(/-/g, ' ');
+    const tokens = rawSub.split(/\s+/).filter(w => w.length > 2 && w !== 'and' && w !== 'sarees');
+    const subFiltered = list.filter(p => {
+      const pText = [p.name, p.description, p.category, p.ingredients, p.slug].filter(Boolean).join(' ').toLowerCase();
+      return pText.includes(rawSub) || tokens.some(t => pText.includes(t));
+    });
+    // If specific subcollection matches found, use them; otherwise keep category list so users never see 0 products
+    if (subFiltered.length > 0) {
+      list = subFiltered;
+    }
+  }
+
+  // 3. Keyword search (name, description, category, ingredients, slug)
   if (params.keyword && String(params.keyword).trim()) {
     const kw = String(params.keyword).trim().toLowerCase();
     list = list.filter(p =>
@@ -1200,28 +1225,6 @@ export const filterCatalogSarees = (params = {}) => {
       p.ingredients?.toLowerCase().includes(kw) ||
       p.slug?.toLowerCase().includes(kw)
     );
-  }
-
-  // 2. SubCollection search / filter
-  if (params.subCollection && String(params.subCollection).trim()) {
-    const sub = String(params.subCollection).trim().toLowerCase().replace(/-/g, ' ');
-    list = list.filter(p =>
-      p.name?.toLowerCase().includes(sub) ||
-      p.description?.toLowerCase().includes(sub) ||
-      p.ingredients?.toLowerCase().includes(sub) ||
-      p.slug?.toLowerCase().includes(sub.replace(/\s+/g, '-'))
-    );
-  }
-
-  // 3. Category filter with normalization
-  if (params.category && params.category !== 'All') {
-    const targetCat = canonicalCategory(params.category).toLowerCase();
-    list = list.filter(p => {
-      const pCat = p.category?.toLowerCase() || '';
-      return pCat === targetCat || 
-             pCat.includes(targetCat.replace(' sarees', '')) || 
-             targetCat.includes(pCat.replace(' sarees', ''));
-    });
   }
 
   // 4. In Stock only

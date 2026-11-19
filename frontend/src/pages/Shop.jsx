@@ -73,9 +73,21 @@ const Shop = () => {
   const [silkMarkOnly, setSilkMarkOnly] = useState(false);
   const [sort, setSort] = useState(urlSort);
 
+  // Initial filtered state based on URL parameters to prevent any blank/flicker state
+  const initialData = useMemo(() => {
+    return filterCatalogSarees({
+      category: urlCategory,
+      subCollection: urlSubCollection,
+      keyword: urlKeyword,
+      minPrice: urlMinPrice,
+      maxPrice: urlMaxPrice,
+      sort: urlSort
+    });
+  }, [urlCategory, urlSubCollection, urlKeyword, urlMinPrice, urlMaxPrice, urlSort]);
+
   // UI State
-  const [products, setProducts] = useState(allSareesCatalog);
-  const [totalCount, setTotalCount] = useState(allSareesCatalog.length);
+  const [products, setProducts] = useState(initialData.products);
+  const [totalCount, setTotalCount] = useState(initialData.totalCount);
   const [loading, setLoading] = useState(false);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
@@ -87,6 +99,16 @@ const Shop = () => {
     setMinPrice(urlMinPrice);
     setMaxPrice(urlMaxPrice);
     setSort(urlSort);
+    const fresh = filterCatalogSarees({
+      category: urlCategory,
+      subCollection: urlSubCollection,
+      keyword: urlKeyword,
+      minPrice: urlMinPrice,
+      maxPrice: urlMaxPrice,
+      sort: urlSort
+    });
+    setProducts(fresh.products);
+    setTotalCount(fresh.totalCount);
   }, [urlCategory, urlSubCollection, urlKeyword, urlMinPrice, urlMaxPrice, urlSort]);
 
   // Dynamic count calculator for category pills
@@ -161,7 +183,7 @@ const Shop = () => {
   // Main filter effect
   useEffect(() => {
     executeFilter();
-  }, [category, subCollection, minPrice, maxPrice, inStockOnly, silkMarkOnly, sort]);
+  }, [category, subCollection, keyword, minPrice, maxPrice, inStockOnly, silkMarkOnly, sort]);
 
   // Apply filters and update URL
   const handleFilterApply = (newValues = {}) => {
