@@ -167,7 +167,7 @@ const ProductQuickViewModal = ({ product, onClose }) => {
 
               {/* WhatsApp Quick Inquire */}
               <a
-                href={`https://wa.me/919876543210?text=${encodeURIComponent(`Namaste! I would like to ask about the "${product.name}" (Price: ₹${activePrice.toLocaleString('en-IN')}) from Saree Sundari.`)}`}
+                href={`https://wa.me/919346638123?text=${encodeURIComponent(`Namaste! I would like to ask about the "${product.name}" (Price: ₹${activePrice.toLocaleString('en-IN')}) from Saree Sundarii.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full py-2.5 px-3 rounded-xl bg-[#25D366]/10 hover:bg-[#25D366] text-[#075E54] hover:text-white border border-[#25D366]/40 font-bold text-[11px] flex items-center justify-center gap-2 transition-all"

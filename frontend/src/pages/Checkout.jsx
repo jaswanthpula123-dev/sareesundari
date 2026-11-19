@@ -175,7 +175,7 @@ const Checkout = () => {
                       required
                       value={formData.mobile}
                       onChange={handleInputChange}
-                      placeholder="e.g. 9876543210"
+                      placeholder="e.g. 9346638123"
                       className="w-full px-4 py-2.5 bg-[#fdfbf7] border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-[#5B0E2D]"
                     />
                   </div>

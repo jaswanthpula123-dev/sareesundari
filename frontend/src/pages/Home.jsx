@@ -593,7 +593,7 @@ const Home = () => {
 
               <div className="pt-2 flex justify-center lg:justify-start">
                 <a
-                  href="https://wa.me/919876543210?text=Namaste!%20I%20would%20love%20to%20know%20more%20about%20your%20handloom%20master%20weavers."
+                  href="https://wa.me/919346638123?text=Namaste!%20I%20would%20love%20to%20know%20more%20about%20your%20handloom%20master%20weavers."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#25D366] text-white font-bold text-xs shadow-lg hover:bg-[#20ba5a] transition-all"

@@ -110,10 +110,10 @@ const Navbar = () => {
               <span className="text-[#fcedd8]/90">for Flat 20% Off</span>
             </span>
             <span className="text-[#d4af37]">✦</span>
-            <span className="flex items-center gap-1.5">
+            <a href="https://wa.me/919346638123?text=Namaste!%20I%20would%20like%20styling%20advice%20for%20Saree%20Sundarii%20handlooms." target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[#d4af37] transition-colors">
               <PhoneCall className="w-3.5 h-3.5 text-[#d4af37]" />
-              <span>WhatsApp Video Draping Concierge: <strong>+91 98765 43210</strong></span>
-            </span>
+              <span>WhatsApp Video Draping Concierge: <strong>+91 93466 38123</strong></span>
+            </a>
             <span className="text-[#d4af37]">✦</span>
             <span className="flex items-center gap-2">
               <span>👑 100% Tested Pure 24K Gold & Silver Zari</span>
@@ -141,10 +141,10 @@ const Navbar = () => {
               <span className="text-[#fcedd8]/90">for Flat 20% Off</span>
             </span>
             <span className="text-[#d4af37]">✦</span>
-            <span className="flex items-center gap-1.5">
+            <a href="https://wa.me/919346638123?text=Namaste!%20I%20would%20like%20styling%20advice%20for%20Saree%20Sundarii%20handlooms." target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[#d4af37] transition-colors">
               <PhoneCall className="w-3.5 h-3.5 text-[#d4af37]" />
-              <span>WhatsApp Video Draping Concierge: <strong>+91 98765 43210</strong></span>
-            </span>
+              <span>WhatsApp Video Draping Concierge: <strong>+91 93466 38123</strong></span>
+            </a>
             <span className="text-[#d4af37]">✦</span>
             <span className="flex items-center gap-2">
               <span>👑 100% Tested Pure 24K Gold & Silver Zari</span>
@@ -680,7 +680,7 @@ const Navbar = () => {
           {/* Concierge & Support Helper */}
           <div className="pt-3 border-t border-[#d4af37]/20 flex items-center justify-between px-1">
             <a
-              href="https://wa.me/919876543210?text=Namaste!%20I%20would%20like%20styling%20advice%20for%20Saree%20Sundarii%20handlooms."
+              href="https://wa.me/919346638123?text=Namaste!%20I%20would%20like%20styling%20advice%20for%20Saree%20Sundarii%20handlooms."
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-xs font-bold text-[#25D366]"

@@ -77,7 +77,7 @@ const Contact = () => {
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-[#6b0f1a] shrink-0" />
-                  <span className="font-bold">+91 98765 43210 / +91 98765 00001</span>
+                  <a href="tel:+919346638123" className="font-bold hover:underline">+91 93466 38123</a>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-[#6b0f1a] shrink-0" />
@@ -104,7 +104,7 @@ const Contact = () => {
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="w-4 h-4 text-[#6b0f1a] shrink-0" />
-                  <span>+91 91234 56789</span>
+                  <a href="tel:+919346638123" className="hover:underline font-bold">+91 93466 38123</a>
                 </div>
               </div>
             </div>
@@ -164,7 +164,7 @@ const Contact = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    placeholder="e.g. 9876543210"
+                    placeholder="e.g. 9346638123"
                     required
                     className="w-full px-3.5 py-2.5 text-xs bg-[#fdfbf7] border border-gray-200 rounded-xl focus:outline-none focus:border-[#6b0f1a]"
                   />

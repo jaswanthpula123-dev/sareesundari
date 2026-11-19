@@ -5,7 +5,7 @@ const WhatsAppButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [customMessage, setCustomMessage] = useState('');
 
-  const conciergeNumber = '919876543210'; // Saree Sundarii flagship concierge
+  const conciergeNumber = '919346638123'; // Saree Sundarii flagship concierge (+91 93466 38123)
 
   const handleSendWhatsApp = (text) => {
     const message = text || customMessage || 'Namaste! I am browsing Saree Sundarii luxury handlooms and would love personal styling advice and video draping assistance.';

@@ -176,7 +176,7 @@ const Banarasi = () => {
                 </a>
 
                 <a
-                  href="https://wa.me/919876543210?text=Namaste!%20I%20would%20like%20to%20inquire%20about%20your%20authentic%20Banarasi%20Silk%20Saree%20collection%20(Kadwa,%20Jangla,%20Shikargah)."
+                  href="https://wa.me/919346638123?text=Namaste!%20I%20would%20like%20to%20inquire%20about%20your%20authentic%20Banarasi%20Silk%20Saree%20collection%20(Kadwa,%20Jangla,%20Shikargah)."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[#25D366] hover:bg-[#1EBE5D] text-white text-xs sm:text-sm font-bold shadow-lg transition-all cursor-pointer"
@@ -475,7 +475,7 @@ const Banarasi = () => {
             </p>
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <a
-                href="https://wa.me/919876543210?text=Namaste!%20I%20would%20like%20to%20book%20a%20personal%20Banarasi%20Bridal%20Consultation%20with%20your%20Master%20Weaver%20Stylist."
+                href="https://wa.me/919346638123?text=Namaste!%20I%20would%20like%20to%20book%20a%20personal%20Banarasi%20Bridal%20Consultation%20with%20your%20Master%20Weaver%20Stylist."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 bg-[#25D366] hover:bg-[#1EBE5D] text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center gap-2 cursor-pointer"
