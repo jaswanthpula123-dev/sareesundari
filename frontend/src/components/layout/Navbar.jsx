@@ -30,6 +30,7 @@ const Navbar = () => {
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [activeCategoryDropdown, setActiveCategoryDropdown] = useState(null);
   const [mobileExpandedCat, setMobileExpandedCat] = useState(null);
+  const [activeMobileCategoryBar, setActiveMobileCategoryBar] = useState(null);
 
   const navRef = useRef(null);
   const dropdownTimeoutRef = useRef(null);
@@ -44,6 +45,7 @@ const Navbar = () => {
       if (navRef.current && !navRef.current.contains(e.target)) {
         setUserDropdownOpen(false);
         setActiveCategoryDropdown(null);
+        setActiveMobileCategoryBar(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -54,6 +56,7 @@ const Navbar = () => {
   useEffect(() => {
     setMobileMenuOpen(false);
     setActiveCategoryDropdown(null);
+    setActiveMobileCategoryBar(null);
     setUserDropdownOpen(false);
     setSearchOpen(false);
   }, [location.pathname]);
@@ -311,7 +314,7 @@ const Navbar = () => {
                   )}
                 </div>
               ) : (
-                <div className="flex items-center gap-2">
+                <div className="hidden sm:flex items-center gap-2">
                   <Link
                     to="/login"
                     className="text-xs font-bold text-[#5B0E2D] px-3 py-1.5 rounded-full hover:bg-[#f7f1e5] transition-colors"
@@ -320,7 +323,7 @@ const Navbar = () => {
                   </Link>
                   <Link
                     to="/register"
-                    className="hidden sm:inline-block text-xs font-bold text-white bg-[#5B0E2D] hover:bg-[#38050c] px-3.5 py-1.5 rounded-full shadow transition-all"
+                    className="text-xs font-bold text-white bg-[#5B0E2D] hover:bg-[#38050c] px-3.5 py-1.5 rounded-full shadow transition-all"
                   >
                     Register
                   </Link>
@@ -436,6 +439,107 @@ const Navbar = () => {
             })}
           </nav>
         </div>
+      </div>
+
+      {/* 3.1 Dedicated Categories Navigation Bar (Mobile View - Always Visible at Top) */}
+      {/* "the above all categories in web site but that under sarees collection is not in mobile" */}
+      <div className="lg:hidden border-t border-[#d4af37]/25 bg-[#fbf8f2]/95 backdrop-blur-md shadow-2xs">
+        <div className="flex items-center gap-1.5 overflow-x-auto px-3 py-2 scrollbar-none">
+          {categoriesWithSubcategories.map((cat) => {
+            const isSelected = activeMobileCategoryBar === cat.id;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveMobileCategoryBar(isSelected ? null : cat.id)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all shrink-0 border ${
+                  isSelected
+                    ? 'bg-[#5B0E2D] text-white border-[#5B0E2D] shadow-sm'
+                    : 'bg-white text-[#2b1f1d] border-[#d4af37]/35 hover:border-[#5B0E2D]'
+                }`}
+              >
+                <img
+                  src={cat.image}
+                  alt={cat.shortName}
+                  className="w-4 h-4 rounded-full object-cover border border-[#d4af37]/60 shrink-0"
+                />
+                <span>{cat.shortName}</span>
+                {isSelected ? (
+                  <ChevronUp className="w-3.5 h-3.5 text-[#d4af37]" />
+                ) : (
+                  <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Mobile Category Dropdown / Subcategories & Sarees Collection Drawer */}
+        {activeMobileCategoryBar && (() => {
+          const selectedCat = categoriesWithSubcategories.find(c => c.id === activeMobileCategoryBar);
+          if (!selectedCat) return null;
+          return (
+            <div className="bg-white border-t border-[#d4af37]/25 p-4 space-y-3 animate-fadeIn shadow-xl">
+              <div className="flex items-center justify-between pb-2.5 border-b border-gray-100">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={selectedCat.image}
+                    alt={selectedCat.name}
+                    className="w-12 h-12 rounded-xl object-cover border border-[#d4af37]/30 shadow-xs shrink-0"
+                  />
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[9px] font-bold uppercase tracking-wider bg-[#d4af37]/20 text-[#5B0E2D] px-2 py-0.5 rounded-full">
+                        {selectedCat.badge}
+                      </span>
+                      <span className="text-[10px] text-gray-500 font-medium">
+                        {selectedCat.count}
+                      </span>
+                    </div>
+                    <h4 className="font-serif font-bold text-sm text-[#5B0E2D] mt-0.5">
+                      {selectedCat.name}
+                    </h4>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setActiveMobileCategoryBar(null)}
+                  className="p-1.5 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
+                  aria-label="Close category details"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Subcategories list */}
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#9a6f14] block mb-2">
+                  All Subcategories & Weaves:
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {selectedCat.subcategories.map((sub) => (
+                    <Link
+                      key={sub.name}
+                      to={sub.path}
+                      onClick={() => setActiveMobileCategoryBar(null)}
+                      className="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-[#fbf8f2] border border-[#d4af37]/25 text-[#2b1f1d] hover:bg-[#5B0E2D] hover:text-white transition-colors"
+                    >
+                      {sub.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Direct View Saree Collection Button */}
+              <Link
+                to={selectedCat.route}
+                onClick={() => setActiveMobileCategoryBar(null)}
+                className="w-full py-2.5 rounded-xl bg-[#5B0E2D] hover:bg-[#38050c] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md transition-all"
+              >
+                <span>Explore Full {selectedCat.shortName} Sarees Collection</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#d4af37]" />
+              </Link>
+            </div>
+          );
+        })()}
       </div>
 
       {/* 4. Expandable Search Bar */}

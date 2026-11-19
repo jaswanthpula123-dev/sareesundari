@@ -181,6 +181,30 @@ const Shop = () => {
           </div>
         </div>
 
+        {/* Mobile Horizontal Category Pills Bar (Fast Tap & Filter) */}
+        <div className="lg:hidden mb-6 -mx-4 px-4 overflow-x-auto scrollbar-none flex items-center gap-2">
+          {categoriesList.map((cat) => {
+            const isCatActive = category === cat;
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => {
+                  setCategory(cat);
+                  handleFilterApply({ category: cat });
+                }}
+                className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border shrink-0 ${
+                  isCatActive
+                    ? 'bg-[#5B0E2D] text-white border-[#5B0E2D] shadow-sm'
+                    : 'bg-white text-[#2b1f1d] border-[#d4af37]/35 hover:border-[#5B0E2D]'
+                }`}
+              >
+                {cat === 'All' ? 'All Sarees (34)' : cat.replace(' Sarees', '')}
+              </button>
+            );
+          })}
+        </div>
+
         {/* Main Grid: Sidebar + Sarees Catalog */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           

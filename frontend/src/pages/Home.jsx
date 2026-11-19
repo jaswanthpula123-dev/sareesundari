@@ -30,6 +30,8 @@ const Home = () => {
   const [bridalSpecials, setBridalSpecials] = useState([]);
   const [kanjivaramSarees, setKanjivaramSarees] = useState([]);
   const [banarasiSarees, setBanarasiSarees] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
+  const [activeCategoryTab, setActiveCategoryTab] = useState('All');
   const [categories, setCategories] = useState([]);
   const [selectedPlatterIndex, setSelectedPlatterIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -123,13 +125,12 @@ const Home = () => {
     const loadHomeData = async () => {
       try {
         setLoading(true);
-        const [featRes, bestRes, bridalRes, catRes, kanjiRes, banarRes] = await Promise.all([
+        const [featRes, bestRes, bridalRes, catRes, allRes] = await Promise.all([
           productAPI.getFeatured().catch(() => ({ products: [] })),
           productAPI.getBestSellers().catch(() => ({ products: [] })),
           productAPI.getAll({ category: 'Wedding Sarees' }).catch(() => ({ products: [] })),
           categoryAPI.getAll().catch(() => ({ categories: [] })),
-          productAPI.getAll({ category: 'Kanjivaram Sarees' }).catch(() => ({ products: [] })),
-          productAPI.getAll({ category: 'Banarasi Sarees' }).catch(() => ({ products: [] }))
+          productAPI.getAll({ limit: 50 }).catch(() => ({ products: [] }))
         ]);
 
         if (featRes.products && featRes.products.length > 0) {
@@ -141,14 +142,13 @@ const Home = () => {
         if (bridalRes.products && bridalRes.products.length > 0) {
           setBridalSpecials(bridalRes.products.slice(0, 4));
         }
+        if (allRes.products && allRes.products.length > 0) {
+          setAllProducts(allRes.products);
+          setKanjivaramSarees(allRes.products.filter(p => p.category?.toLowerCase().includes('kanjivaram')).slice(0, 4));
+          setBanarasiSarees(allRes.products.filter(p => p.category?.toLowerCase().includes('banarasi')).slice(0, 4));
+        }
         if (catRes.categories && catRes.categories.length > 0) {
           setCategories(catRes.categories);
-        }
-        if (kanjiRes.products && kanjiRes.products.length > 0) {
-          setKanjivaramSarees(kanjiRes.products.slice(0, 4));
-        }
-        if (banarRes.products && banarRes.products.length > 0) {
-          setBanarasiSarees(banarRes.products.slice(0, 4));
         }
       } catch (err) {
         console.error('Home data load error:', err);
@@ -460,33 +460,102 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 3. Featured Masterpiece Sarees Section */}
+      {/* 3. Featured Masterpiece Sarees Section with Interactive Category Switcher */}
+      {/* "the above all categories in web site but that under sarees collection is not in mobile" */}
       <section className="py-14 bg-gradient-to-b from-[#fffaf3] to-[#fdfbf7] border-y border-[#d4af37]/25">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-10">
+          
+          {/* Header */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
             <div>
               <span className="text-xs font-bold text-[#9a6f14] uppercase tracking-wider flex items-center gap-1.5">
                 <Crown className="w-4 h-4 text-[#d4af37]" />
                 <span>Handloom Masterpieces</span>
               </span>
               <h2 className="font-serif text-3xl font-extrabold text-[#5B0E2D] mt-1">
-                Featured Heirloom Sarees
+                Featured Heirloom Sarees Collection
               </h2>
+              <p className="text-xs text-gray-600 mt-1">
+                Select any weave category below to explore its handcrafted pure silk & cotton drapes.
+              </p>
             </div>
             <Link
-              to="/shop?featured=true"
+              to={activeCategoryTab === 'All' ? '/shop' : `/shop?category=${encodeURIComponent(activeCategoryTab)}`}
               className="text-xs font-bold text-[#5B0E2D] hover:text-[#38050c] flex items-center gap-1 bg-[#f7f1e5] px-4 py-2 rounded-full border border-[#d4af37]/40 shadow-xs group"
             >
-              <span>Explore All Featured ({featuredProducts.length || '30+'})</span>
+              <span>Explore Full {activeCategoryTab === 'All' ? 'Catalog (34 Sarees)' : activeCategoryTab}</span>
               <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProducts.slice(0, 4).map((product) => (
-              <ProductCard key={product._id || product.slug} product={product} />
-            ))}
+          {/* Interactive Category Tabs (Mobile Touch-Scrollable + Desktop) */}
+          <div className="mb-8 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-none flex items-center gap-2 pb-2">
+            {[
+              { label: 'All Curated', value: 'All' },
+              { label: 'Kanjivaram', value: 'Kanjivaram Sarees' },
+              { label: 'Banarasi', value: 'Banarasi Sarees' },
+              { label: 'Silk Sarees', value: 'Silk Sarees' },
+              { label: 'Cotton Weaves', value: 'Cotton Sarees' },
+              { label: 'Wedding Bridal', value: 'Wedding Sarees' },
+              { label: 'Party Wear', value: 'Party Wear Sarees' },
+              { label: 'Designer', value: 'Designer Sarees' },
+              { label: 'Georgette & Chiffon', value: 'Georgette & Chiffon' }
+            ].map((tab) => {
+              const isTabActive = activeCategoryTab === tab.value;
+              return (
+                <button
+                  key={tab.value}
+                  onClick={() => setActiveCategoryTab(tab.value)}
+                  className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all border shrink-0 flex items-center gap-1.5 ${
+                    isTabActive
+                      ? 'bg-[#5B0E2D] text-white border-[#5B0E2D] shadow-md scale-102'
+                      : 'bg-white text-[#2b1f1d] border-[#d4af37]/35 hover:border-[#5B0E2D] hover:bg-[#fbf8f2]'
+                  }`}
+                >
+                  {isTabActive && <Sparkles className="w-3 h-3 text-[#d4af37]" />}
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
+
+          {/* Sarees Grid - Responsive 1-col on mobile, 2-col on tablet, 4-col on laptop */}
+          {(() => {
+            const displayedSarees = activeCategoryTab === 'All'
+              ? (featuredProducts.length > 0 ? featuredProducts : allProducts.slice(0, 8))
+              : allProducts.filter(p => {
+                  const catTarget = activeCategoryTab.toLowerCase().replace(' sarees', '');
+                  return p.category?.toLowerCase().includes(catTarget);
+                }).slice(0, 8);
+
+            if (displayedSarees.length === 0) {
+              return (
+                <div className="py-16 text-center text-xs text-gray-500 bg-white rounded-2xl border border-dashed border-[#d4af37]/40">
+                  No sarees found in this category currently.
+                </div>
+              );
+            }
+
+            return (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {displayedSarees.map((product) => (
+                  <ProductCard key={product._id || product.slug} product={product} />
+                ))}
+              </div>
+            );
+          })()}
+
+          {/* Bottom Explore Link */}
+          <div className="mt-8 text-center">
+            <Link
+              to={activeCategoryTab === 'All' ? '/shop' : `/shop?category=${encodeURIComponent(activeCategoryTab)}`}
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-[#5B0E2D] hover:bg-[#24030F] text-white font-bold text-xs shadow-md transition-all group"
+            >
+              <span>View All Handpicked {activeCategoryTab === 'All' ? 'Sarees' : activeCategoryTab} in Vault</span>
+              <ArrowRight className="w-3.5 h-3.5 text-[#d4af37] group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
         </div>
       </section>
 
