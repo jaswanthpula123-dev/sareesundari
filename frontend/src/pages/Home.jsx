@@ -23,18 +23,29 @@ import ProductCard from '../components/product/ProductCard';
 import { productAPI, categoryAPI } from '../services/api';
 import { useToast } from '../context/ToastContext';
 import { categoriesWithSubcategories } from '../data/categoriesData';
+import { allSareesCatalog } from '../data/sareesCatalog';
 
 const Home = () => {
-  const [featuredProducts, setFeaturedProducts] = useState([]);
-  const [bestSellers, setBestSellers] = useState([]);
-  const [bridalSpecials, setBridalSpecials] = useState([]);
-  const [kanjivaramSarees, setKanjivaramSarees] = useState([]);
-  const [banarasiSarees, setBanarasiSarees] = useState([]);
-  const [allProducts, setAllProducts] = useState([]);
+  const [featuredProducts, setFeaturedProducts] = useState(() =>
+    allSareesCatalog.filter(p => p.isFeatured).slice(0, 8)
+  );
+  const [bestSellers, setBestSellers] = useState(() =>
+    allSareesCatalog.filter(p => p.isBestSeller).slice(0, 4)
+  );
+  const [bridalSpecials, setBridalSpecials] = useState(() =>
+    allSareesCatalog.filter(p => p.category?.toLowerCase().includes('wedding') || p.isFestivalSpecial).slice(0, 4)
+  );
+  const [kanjivaramSarees, setKanjivaramSarees] = useState(() =>
+    allSareesCatalog.filter(p => p.category?.toLowerCase().includes('kanjivaram')).slice(0, 4)
+  );
+  const [banarasiSarees, setBanarasiSarees] = useState(() =>
+    allSareesCatalog.filter(p => p.category?.toLowerCase().includes('banarasi')).slice(0, 4)
+  );
+  const [allProducts, setAllProducts] = useState(allSareesCatalog);
   const [activeCategoryTab, setActiveCategoryTab] = useState('All');
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState(categoriesWithSubcategories);
   const [selectedPlatterIndex, setSelectedPlatterIndex] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const { addToast } = useToast();
 

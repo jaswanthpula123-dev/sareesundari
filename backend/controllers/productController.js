@@ -98,12 +98,15 @@ const getAllProducts = async (req, res) => {
       }
 
       if (subCollection) {
-        const sub = subCollection.toLowerCase().replace(/-/g, ' ');
-        result = result.filter(p =>
-          p.name.toLowerCase().includes(sub) ||
-          p.description.toLowerCase().includes(sub) ||
-          (p.ingredients && p.ingredients.toLowerCase().includes(sub))
-        );
+        const sub = String(subCollection).toLowerCase().replace(/\+/g, ' ').replace(/-/g, ' ').trim();
+        const tokens = sub.split(/\s+/).filter(w => w.length > 2 && w !== 'and' && w !== 'sarees');
+        const subMatches = result.filter(p => {
+          const text = [p.name, p.description, p.ingredients, p.category].filter(Boolean).join(' ').toLowerCase();
+          return text.includes(sub) || tokens.some(t => text.includes(t));
+        });
+        if (subMatches.length > 0) {
+          result = subMatches;
+        }
       }
 
       if (inStockOnly === 'true' || inStockOnly === true) {

@@ -153,13 +153,20 @@ const Shop = () => {
       // Try API with automatic fallback to full local catalog
       const res = await productAPI.getAll(params);
 
-      if (res && res.products && Array.isArray(res.products)) {
+      if (res && res.products && Array.isArray(res.products) && res.products.length > 0) {
         setProducts(res.products);
         setTotalCount(res.totalCount || res.count || res.products.length);
       } else {
         const localRes = filterCatalogSarees(params);
-        setProducts(localRes.products);
-        setTotalCount(localRes.totalCount);
+        if (localRes.products && localRes.products.length > 0) {
+          setProducts(localRes.products);
+          setTotalCount(localRes.totalCount);
+        } else {
+          // Gracefully fallback to parent category so products ALWAYS load
+          const parentRes = filterCatalogSarees({ category: params.category || 'All' });
+          setProducts(parentRes.products.length > 0 ? parentRes.products : allSareesCatalog);
+          setTotalCount(parentRes.products.length > 0 ? parentRes.totalCount : allSareesCatalog.length);
+        }
       }
     } catch (err) {
       console.error('Failed to fetch sarees, applying client catalog fallback:', err);
@@ -173,8 +180,14 @@ const Shop = () => {
         silkMarkOnly: overrides.silkMarkOnly !== undefined ? overrides.silkMarkOnly : silkMarkOnly,
         sort: overrides.sort !== undefined ? overrides.sort : sort
       });
-      setProducts(localRes.products);
-      setTotalCount(localRes.totalCount);
+      if (localRes.products && localRes.products.length > 0) {
+        setProducts(localRes.products);
+        setTotalCount(localRes.totalCount);
+      } else {
+        const parentRes = filterCatalogSarees({ category: (overrides.category !== undefined ? overrides.category : category) || 'All' });
+        setProducts(parentRes.products.length > 0 ? parentRes.products : allSareesCatalog);
+        setTotalCount(parentRes.products.length > 0 ? parentRes.totalCount : allSareesCatalog.length);
+      }
     } finally {
       setLoading(false);
     }

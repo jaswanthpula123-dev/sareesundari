@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Saree Sundarii – Royal Indian Handloom Silk Sarees & Bridal Heirlooms E-Commerce Platform",
   "scripts": {
-    "build": "cd frontend && npm install && npm run build",
-    "build:frontend": "cd frontend && npm run build",
+    "build": "cd frontend && npm install && npm run build && node -e \"const fs=require('fs'); fs.cpSync('dist', '../dist', {recursive:true});\"",
+    "build:frontend": "cd frontend && npm run build && node -e \"const fs=require('fs'); fs.cpSync('dist', '../dist', {recursive:true});\"",
     "dev:backend": "cd backend && npm run dev",
-    "dev:frontend": "cd frontend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev -- --host",
     "start": "cd backend && npm start"
   },
   "keywords": [
