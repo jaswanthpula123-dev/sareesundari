@@ -1,0 +1,138 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --maroon-950: #38050c;
+    --maroon-900: #4d0a13;
+    --maroon-800: #6b0f1a; /* Deep Maroon Primary */
+    --maroon-700: #7c121e;
+    --maroon-600: #961928;
+    --maroon-500: #b52233;
+    --gold-700: #9a6f14;
+    --gold-600: #b8861d;
+    --gold-500: #d4af37; /* Golden Yellow Primary */
+    --gold-400: #e5a93c;
+    --gold-300: #f59e0b;
+    --gold-200: #f8df9e;
+    --gold-100: #fcedd8;
+    --cream-50: #fdfbf7;  /* Cream White */
+    --cream-100: #fffaf3;
+    --cream-200: #fbf8f2;
+    --beige-100: #f7f1e5; /* Light Beige */
+    --beige-200: #f3ede2;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #fdfbf7;
+    color: #2b1f1d;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, .font-serif {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  .font-cinzel {
+    font-family: 'Cinzel Decorative', cursive, Georgia, serif;
+  }
+}
+
+/* Custom Utilities for Saree Sundarii */
+.bg-maroon-900 { background-color: #4d0a13; }
+.bg-maroon-800 { background-color: #6b0f1a; }
+.bg-maroon-700 { background-color: #7c121e; }
+.text-maroon-900 { color: #4d0a13; }
+.text-maroon-800 { color: #6b0f1a; }
+.text-maroon-700 { color: #7c121e; }
+.border-maroon-800 { border-color: #6b0f1a; }
+
+.bg-gold-500 { background-color: #d4af37; }
+.bg-gold-400 { background-color: #e5a93c; }
+.text-gold-600 { color: #b8861d; }
+.text-gold-500 { color: #d4af37; }
+.text-gold-400 { color: #e5a93c; }
+.border-gold-500 { border-color: #d4af37; }
+.border-gold-400 { border-color: #e5a93c; }
+
+.bg-cream-50 { background-color: #fdfbf7; }
+.bg-cream-100 { background-color: #fffaf3; }
+.bg-beige-100 { background-color: #f7f1e5; }
+.bg-beige-200 { background-color: #f3ede2; }
+
+/* Luxury text gradients */
+.gold-gradient-text {
+  background: linear-gradient(135deg, #b8861d 0%, #d4af37 50%, #e5a93c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.maroon-gradient-text {
+  background: linear-gradient(135deg, #4d0a13 0%, #6b0f1a 60%, #961928 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-shimmer {
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.4) 50%, rgba(212, 175, 55, 0.1) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+.royal-border {
+  border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.royal-border-hover:hover {
+  border-color: #d4af37;
+  box-shadow: 0 10px 25px -5px rgba(107, 15, 26, 0.1), 0 8px 10px -6px rgba(212, 175, 55, 0.15);
+}
+
+.royal-shadow {
+  box-shadow: 0 10px 30px -5px rgba(107, 15, 26, 0.08), 0 4px 6px -2px rgba(212, 175, 55, 0.06);
+}
+
+.royal-shadow-lg {
+  box-shadow: 0 20px 40px -10px rgba(107, 15, 26, 0.14), 0 8px 16px -4px rgba(212, 175, 55, 0.1);
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Infinite Marquee Scrolling Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Indian sweets luxury scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f7f1e5;
+}
+::-webkit-scrollbar-thumb {
+  background: #d4af37;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6b0f1a;
+}

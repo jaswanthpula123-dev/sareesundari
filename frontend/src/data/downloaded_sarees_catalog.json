@@ -1,0 +1,167 @@
+{
+  "kanjivaram-1": {
+    "file": "/sarees/kanjivaram-1.jpg",
+    "name": "Sovereign Kanchipuram Crimson Temple Korvai Silk Saree",
+    "category": "kanjivaram"
+  },
+  "kanjivaram-2": {
+    "file": "/sarees/kanjivaram-2.jpg",
+    "name": "Royal Emerald Green & Gold Zari Kanchipuram Bridal Pattu",
+    "category": "kanjivaram"
+  },
+  "kanjivaram-3": {
+    "file": "/sarees/kanjivaram-3.jpg",
+    "name": "Celestial Gold & Silver Tissue Kanjivaram Brocade Saree",
+    "category": "kanjivaram"
+  },
+  "kanjivaram-4": {
+    "file": "/sarees/kanjivaram-4.jpg",
+    "name": "Vaira Oosi Fine Metallic Needle-Stripe Kanchipuram Saree",
+    "category": "kanjivaram"
+  },
+  "kanjivaram-5": {
+    "file": "/sarees/kanjivaram-5.jpg",
+    "name": "Vintage Magenta Shot-Silk Kanjivaram Zari Saree",
+    "category": "kanjivaram"
+  },
+  "banarasi-1": {
+    "file": "/sarees/banarasi-1.jpg",
+    "name": "Heritage Banarasi Katan Silk Gold Brocade Saree",
+    "category": "banarasi"
+  },
+  "banarasi-2": {
+    "file": "/sarees/banarasi-2.jpg",
+    "name": "Handwoven Kadwa Floral Jaal Banarasi Silk Saree",
+    "category": "banarasi"
+  },
+  "banarasi-3": {
+    "file": "/sarees/banarasi-3.jpg",
+    "name": "Antique Gold & Silver Zari Banarasi Shikargah Saree",
+    "category": "banarasi"
+  },
+  "banarasi-4": {
+    "file": "/sarees/banarasi-4.jpg",
+    "name": "Varanasi Master Handloom Regal Blue Tanchoi Saree",
+    "category": "banarasi"
+  },
+  "silk-mysore-1": {
+    "file": "/sarees/silk-mysore-1.jpg",
+    "name": "Royal Mysore Crepe Silk Pure Gold Zari Saree",
+    "category": "silk"
+  },
+  "silk-paithani-1": {
+    "file": "/sarees/silk-paithani-1.jpg",
+    "name": "Yeola Paithani Pure Silk Peacock Asawali Pallu Saree",
+    "category": "silk"
+  },
+  "silk-paithani-2": {
+    "file": "/sarees/silk-paithani-2.jpg",
+    "name": "Historic Gold Brocade Paithani Bridal Saree",
+    "category": "silk"
+  },
+  "silk-baluchari-1": {
+    "file": "/sarees/silk-baluchari-1.jpg",
+    "name": "Bishnupur Baluchari Silk Mythological Swarnachari Saree",
+    "category": "silk"
+  },
+  "silk-baluchari-2": {
+    "file": "/sarees/silk-baluchari-2.jpg",
+    "name": "Handcrafted Terracotta & Maroon Baluchari Silk Saree",
+    "category": "silk"
+  },
+  "silk-sambalpuri-1": {
+    "file": "/sarees/silk-sambalpuri-1.jpg",
+    "name": "Sambalpuri Double Ikat Pure Silk Handloom Saree",
+    "category": "silk"
+  },
+  "silk-sambalpuri-2": {
+    "file": "/sarees/silk-sambalpuri-2.jpg",
+    "name": "Midnight Blue Sambalpuri Baandha Silk Saree",
+    "category": "silk"
+  },
+  "silk-sambalpuri-3": {
+    "file": "/sarees/silk-sambalpuri-3.jpg",
+    "name": "Auspicious Crimson Sambalpuri Pasapalli Silk Saree",
+    "category": "silk"
+  },
+  "silk-tussar-1": {
+    "file": "/sarees/silk-tussar-1.jpg",
+    "name": "Phulia Wild Forest Tussar Handloom Silk Saree",
+    "category": "silk"
+  },
+  "silk-tussar-2": {
+    "file": "/sarees/silk-tussar-2.jpg",
+    "name": "Raw Organic Gold Tussar Ghicha Silk Saree",
+    "category": "silk"
+  },
+  "cotton-kotadoria-1": {
+    "file": "/sarees/cotton-kotadoria-1.jpg",
+    "name": "Handcrafted Kota Doria Pure Cotton Zari Border Saree",
+    "category": "cotton"
+  },
+  "cotton-kotadoria-2": {
+    "file": "/sarees/cotton-kotadoria-2.jpg",
+    "name": "Pastel Pink Kota Doria Gota Patti Festive Saree",
+    "category": "cotton"
+  },
+  "cotton-jamdani-1": {
+    "file": "/sarees/cotton-jamdani-1.jpg",
+    "name": "Indigo Blue Handwoven Dhakai Jamdani Muslin Cotton Saree",
+    "category": "cotton"
+  },
+  "cotton-jamdani-2": {
+    "file": "/sarees/cotton-jamdani-2.jpg",
+    "name": "Fine Geometric Phool Cotton Jamdani Saree",
+    "category": "cotton"
+  },
+  "cotton-display-1": {
+    "file": "/sarees/cotton-display-1.jpg",
+    "name": "Bengal Tant Handloom Breathable Summer Cotton Saree",
+    "category": "cotton"
+  },
+  "cotton-display-2": {
+    "file": "/sarees/cotton-display-2.jpg",
+    "name": "Chettinad Earthy Tone Handspun Temple Border Cotton Saree",
+    "category": "cotton"
+  },
+  "wedding-bridal-1": {
+    "file": "/sarees/wedding-bridal-1.jpg",
+    "name": "Heirloom Crimson Bridal Wedding Saree with 24K Zari",
+    "category": "wedding"
+  },
+  "designer-bandhani-1": {
+    "file": "/sarees/designer-bandhani-1.jpg",
+    "name": "Heritage Royal Red & Yellow Bandhani Silk Saree",
+    "category": "designer"
+  },
+  "designer-bandhani-2": {
+    "file": "/sarees/designer-bandhani-2.jpg",
+    "name": "Fine Kutch Hand-Tied Bandhej Georgette Saree",
+    "category": "designer"
+  },
+  "designer-bandhani-3": {
+    "file": "/sarees/designer-bandhani-3.jpg",
+    "name": "Radiant Sunset Orange Designer Bandhani Cocktail Saree",
+    "category": "party"
+  },
+  "designer-gujrati-1": {
+    "file": "/sarees/designer-gujrati-1.jpg",
+    "name": "Traditional Gujarati Gharchola Mirror Work Saree",
+    "category": "designer"
+  },
+  "party-silk-drape": {
+    "file": "/sarees/party-silk-drape.jpg",
+    "name": "Glamour Magenta & Royal Purple Metallic Cocktail Saree",
+    "category": "party"
+  },
+  "georgette-printed-1": {
+    "file": "/sarees/georgette-printed-1.jpg",
+    "name": "Artisanal Printed Pure Flowy Georgette Saree",
+    "category": "georgette-chiffon"
+  },
+  "chiffon-sheer-1": {
+    "file": "/sarees/chiffon-sheer-1.jpg",
+    "name": "Featherlight Sheer French Chiffon Saree with Delicate Borders",
+    "category": "georgette-chiffon"
+  }
+}

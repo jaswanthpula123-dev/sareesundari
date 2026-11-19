@@ -1,0 +1,26 @@
+{
+  "name": "saree-sundarii",
+  "version": "1.0.0",
+  "description": "Saree Sundarii – Royal Indian Handloom Silk Sarees & Bridal Heirlooms E-Commerce Platform",
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "start": "cd backend && npm start"
+  },
+  "keywords": [
+    "sarees",
+    "kanjivaram",
+    "banarasi",
+    "silk-sarees",
+    "handloom",
+    "ecommerce",
+    "fullstack",
+    "mern",
+    "react",
+    "express",
+    "mongodb"
+  ],
+  "author": "Saree Sundarii Team",
+  "license": "ISC"
+}
