@@ -1,4 +1,10 @@
 import axios from 'axios';
+import {
+  allSareesCatalog,
+  allCategoriesCatalog,
+  filterCatalogSarees,
+  getCatalogSareeByIdOrSlug
+} from '../data/sareesCatalog';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
@@ -6,7 +12,8 @@ const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  timeout: 3500
 });
 
 // Auto attach JWT token
@@ -41,23 +48,108 @@ export const authAPI = {
   toggleWishlist: (productId) => api.post('/auth/wishlist/toggle', { productId })
 };
 
-// Saree Product APIs
+// Saree Product APIs with Resilient Handloom Catalog Fallback
 export const productAPI = {
-  getAll: (params) => api.get('/products', { params }),
-  getByIdOrSlug: (idOrSlug) => api.get(`/products/${idOrSlug}`),
-  getFeatured: () => api.get('/products/filter/featured'),
-  getBestSellers: () => api.get('/products/filter/bestsellers'),
-  getFestivalSpecials: () => api.get('/products/filter/festivalspecial'),
-  getNewArrivals: () => api.get('/products/filter/new-arrivals'),
-  getRelated: (id) => api.get(`/products/${id}/related`),
-  getReviews: (id) => api.get(`/products/${id}/reviews`),
+  getAll: async (params = {}) => {
+    try {
+      const res = await api.get('/products', { params });
+      if (res && res.success && Array.isArray(res.products) && res.products.length > 0) {
+        return res;
+      }
+    } catch (err) {
+      // API unreachable or 404 on static hosts like Vercel - seamlessly serve client catalog
+    }
+    return filterCatalogSarees(params);
+  },
+
+  getByIdOrSlug: async (idOrSlug) => {
+    try {
+      const res = await api.get(`/products/${idOrSlug}`);
+      if (res && (res.product || res.success)) {
+        return res;
+      }
+    } catch (err) {
+      // Fallback to local catalog
+    }
+    const found = getCatalogSareeByIdOrSlug(idOrSlug);
+    if (found) {
+      return { success: true, product: found };
+    }
+    return { success: false, message: 'Saree not found in royal vault' };
+  },
+
+  getFeatured: async () => {
+    try {
+      const res = await api.get('/products/filter/featured');
+      if (res && res.products && res.products.length > 0) return res;
+    } catch (e) {}
+    return filterCatalogSarees({ isFeatured: true, limit: 8 });
+  },
+
+  getBestSellers: async () => {
+    try {
+      const res = await api.get('/products/filter/bestsellers');
+      if (res && res.products && res.products.length > 0) return res;
+    } catch (e) {}
+    return filterCatalogSarees({ isBestSeller: true, limit: 8 });
+  },
+
+  getFestivalSpecials: async () => {
+    try {
+      const res = await api.get('/products/filter/festivalspecial');
+      if (res && res.products && res.products.length > 0) return res;
+    } catch (e) {}
+    return filterCatalogSarees({ isFestivalSpecial: true, limit: 8 });
+  },
+
+  getNewArrivals: async () => {
+    try {
+      const res = await api.get('/products/filter/new-arrivals');
+      if (res && res.products && res.products.length > 0) return res;
+    } catch (e) {}
+    return filterCatalogSarees({ sort: 'newest', limit: 8 });
+  },
+
+  getRelated: async (id) => {
+    try {
+      const res = await api.get(`/products/${id}/related`);
+      if (res && res.products && res.products.length > 0) return res;
+    } catch (e) {}
+    const p = getCatalogSareeByIdOrSlug(id);
+    const related = allSareesCatalog
+      .filter(item => item._id !== id && (!p || item.category === p.category))
+      .slice(0, 4);
+    return { success: true, products: related.length > 0 ? related : allSareesCatalog.slice(0, 4) };
+  },
+
+  getReviews: async (id) => {
+    try {
+      return await api.get(`/products/${id}/reviews`);
+    } catch (e) {
+      return { success: true, reviews: [] };
+    }
+  },
+
   addReview: (id, reviewData) => api.post(`/products/${id}/reviews`, reviewData)
 };
 
-// Category APIs
+// Category APIs with Resilient Fallback
 export const categoryAPI = {
-  getAll: () => api.get('/categories'),
-  getBySlug: (slug) => api.get(`/categories/${slug}`)
+  getAll: async () => {
+    try {
+      const res = await api.get('/categories');
+      if (res && res.categories && res.categories.length > 0) return res;
+    } catch (e) {}
+    return { success: true, count: allCategoriesCatalog.length, categories: allCategoriesCatalog };
+  },
+  getBySlug: async (slug) => {
+    try {
+      const res = await api.get(`/categories/${slug}`);
+      if (res && res.category) return res;
+    } catch (e) {}
+    const cat = allCategoriesCatalog.find(c => c.slug === slug || c.name.toLowerCase() === String(slug).toLowerCase());
+    return { success: true, category: cat || allCategoriesCatalog[0] };
+  }
 };
 
 // Cart APIs with Weight support

@@ -3,10 +3,20 @@
   "version": "1.0.0",
   "description": "Saree Sundarii – Royal Indian Handloom Silk Sarees & Bridal Heirlooms E-Commerce Platform",
   "scripts": {
+    "build": "npm run build:frontend",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "build:frontend": "cd frontend && npm run build",
     "start": "cd backend && npm start"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.10.1",
+    "morgan": "^1.10.0"
   },
   "keywords": [
     "sarees",

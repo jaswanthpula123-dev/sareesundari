@@ -7,7 +7,7 @@ const { store, generateId } = require('../config/dataStore');
 // @access  Public
 const getAllProducts = async (req, res) => {
   try {
-    const { keyword, category, minPrice, maxPrice, inStockOnly, isFeatured, isBestSeller, isFestivalSpecial, pureGhee, sort, limit = 50 } = req.query;
+    const { keyword, category, subCollection, minPrice, maxPrice, inStockOnly, isFeatured, isBestSeller, isFestivalSpecial, pureGhee, sort, limit = 50 } = req.query;
 
     if (global.__IS_MONGO_CONNECTED) {
       let query = {};
@@ -22,7 +22,16 @@ const getAllProducts = async (req, res) => {
       }
 
       if (category && category !== 'All') {
-        query.category = { $regex: category, $options: 'i' };
+        query.category = { $regex: category.replace(' Sarees', ''), $options: 'i' };
+      }
+
+      if (subCollection) {
+        query.$or = query.$or || [];
+        query.$or.push(
+          { name: { $regex: subCollection, $options: 'i' } },
+          { description: { $regex: subCollection, $options: 'i' } },
+          { ingredients: { $regex: subCollection, $options: 'i' } }
+        );
       }
 
       if (inStockOnly === 'true' || inStockOnly === true) {
@@ -81,10 +90,19 @@ const getAllProducts = async (req, res) => {
       }
 
       if (category && category !== 'All') {
-        const cat = category.toLowerCase().replace(/-/g, ' ');
+        const cat = category.toLowerCase().replace(/-/g, ' ').replace(' sarees', '');
         result = result.filter(p => 
           p.category.toLowerCase().includes(cat) || 
           p.category.toLowerCase().replace(/-/g, ' ').includes(cat)
+        );
+      }
+
+      if (subCollection) {
+        const sub = subCollection.toLowerCase().replace(/-/g, ' ');
+        result = result.filter(p =>
+          p.name.toLowerCase().includes(sub) ||
+          p.description.toLowerCase().includes(sub) ||
+          (p.ingredients && p.ingredients.toLowerCase().includes(sub))
         );
       }
 
