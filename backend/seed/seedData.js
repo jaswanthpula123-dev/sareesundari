@@ -1029,14 +1029,50 @@ const getHashedUsers = async () => {
 
   return [
     {
-      name: 'Sweet Magic Admin',
+      name: 'Saree Sundarii Admin',
+      email: 'admin@sareesundarii.com',
+      password: adminPassword,
+      phone: '+91 98765 00001',
+      role: 'admin',
+      addresses: [
+        {
+          fullName: 'Saree Sundarii Flagship Boutique',
+          mobile: '9876500001',
+          street: 'Plot 42, Road No 10, Banjara Hills',
+          city: 'Hyderabad',
+          state: 'Telangana',
+          pincode: '500034',
+          isDefault: true
+        }
+      ]
+    },
+    {
+      name: 'Aarav Sharma',
+      email: 'customer@sareesundarii.com',
+      password: customerPassword,
+      phone: '+91 91234 56789',
+      role: 'user',
+      addresses: [
+        {
+          fullName: 'Aarav Sharma',
+          mobile: '9123456789',
+          street: 'Flat 302, Palm Meadows, Whitefield',
+          city: 'Bengaluru',
+          state: 'Karnataka',
+          pincode: '560066',
+          isDefault: true
+        }
+      ]
+    },
+    {
+      name: 'Saree Sundarii Admin',
       email: 'admin@sweetmagic.com',
       password: adminPassword,
       phone: '+91 98765 00001',
       role: 'admin',
       addresses: [
         {
-          fullName: 'Sweet Magic Flagship HQ',
+          fullName: 'Saree Sundarii Flagship Boutique',
           mobile: '9876500001',
           street: 'Plot 42, Road No 10, Banjara Hills',
           city: 'Hyderabad',

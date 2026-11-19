@@ -32,7 +32,7 @@ const OrderDetails = () => {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center">
         <div className="w-12 h-12 border-4 border-[#6b0f1a] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-        <p className="text-sm text-gray-500">Retrieving sweet order details...</p>
+        <p className="text-sm text-gray-500">Retrieving saree order details...</p>
       </div>
     );
   }
@@ -158,7 +158,7 @@ const OrderDetails = () => {
 
         {/* Order Items */}
         <div className="border-t border-gray-100 pt-6">
-          <h3 className="font-serif font-bold text-sm text-[#4d0a13] mb-3">Fresh Sweets in this Box</h3>
+          <h3 className="font-serif font-bold text-sm text-[#5B0E2D] mb-3">Handcrafted Sarees in this Order</h3>
           <div className="space-y-3">
             {order.orderItems?.map((item, idx) => (
               <div key={idx} className="flex items-center justify-between p-3 bg-[#fdfbf7] rounded-xl border border-gray-200">

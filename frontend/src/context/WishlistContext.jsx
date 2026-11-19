@@ -9,7 +9,7 @@ export const WishlistProvider = ({ children }) => {
   const { user, isAuthenticated } = useAuth();
   const { addToast } = useToast();
   const [wishlist, setWishlist] = useState(() => {
-    const saved = localStorage.getItem('sweetmagic_wishlist') || localStorage.getItem('sundari_wishlist');
+    const saved = localStorage.getItem('sundari_wishlist');
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -17,7 +17,7 @@ export const WishlistProvider = ({ children }) => {
   useEffect(() => {
     if (isAuthenticated && user?.wishlist) {
       setWishlist(user.wishlist);
-      localStorage.setItem('sweetmagic_wishlist', JSON.stringify(user.wishlist));
+      localStorage.setItem('sundari_wishlist', JSON.stringify(user.wishlist));
     }
   }, [isAuthenticated, user]);
 
@@ -37,7 +37,7 @@ export const WishlistProvider = ({ children }) => {
         const res = await authAPI.toggleWishlist(prodId);
         if (res.success) {
           setWishlist(res.wishlist || []);
-          localStorage.setItem('sweetmagic_wishlist', JSON.stringify(res.wishlist || []));
+          localStorage.setItem('sundari_wishlist', JSON.stringify(res.wishlist || []));
           addToast(res.message);
         }
       } catch (error) {
@@ -53,7 +53,7 @@ export const WishlistProvider = ({ children }) => {
         addToast(`Saved "${product.name}" to favorites ❤️`);
       }
       setWishlist(updated);
-      localStorage.setItem('sweetmagic_wishlist', JSON.stringify(updated));
+      localStorage.setItem('sundari_wishlist', JSON.stringify(updated));
     }
   };
 

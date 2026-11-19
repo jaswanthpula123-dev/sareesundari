@@ -12,12 +12,14 @@ import { adminAPI, productAPI } from '../../services/api';
 import { useToast } from '../../context/ToastContext';
 
 const categoriesList = [
-  'Ghee Sweets',
-  'Dry Fruit Sweets',
-  'Bengali Sweets',
-  'Traditional Laddus',
-  'Milk Sweets',
-  'Festive Hampers'
+  'Kanjivaram Sarees',
+  'Banarasi Sarees',
+  'Silk Sarees',
+  'Cotton Sarees',
+  'Wedding Sarees',
+  'Party Wear Sarees',
+  'Designer Sarees',
+  'Georgette & Chiffon'
 ];
 
 const AdminProductForm = () => {
@@ -28,15 +30,15 @@ const AdminProductForm = () => {
 
   const [formData, setFormData] = useState({
     name: '',
-    category: 'Dry Fruit Sweets',
+    category: 'Kanjivaram Sarees',
     description: '',
     price: '',
     discountPrice: '',
-    stock: 30,
-    weightOptions: ['250g', '500g', '1kg'],
-    images: ['https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?auto=format&fit=crop&w=800&q=80'],
-    ingredients: 'Pure Cow Desi Ghee, Organic Sugar, Nuts, Saffron',
-    shelfLife: '15 Days at room temperature',
+    stock: 25,
+    weightOptions: ['Standard Drape (6.3m)', 'With Unstitched Blouse', 'Custom Stitched Blouse'],
+    images: ['/sarees/kanjivaram-1.jpg'],
+    ingredients: '100% Pure Mulberry Silk, Tested 24K Gold & Silver Zari',
+    shelfLife: 'Dry Clean Only. Wrapped in mulmul cotton cloth.',
     isVeg: true,
     pureGhee: true,
     isFeatured: false,
@@ -55,15 +57,15 @@ const AdminProductForm = () => {
           if (res.success && res.product) {
             setFormData({
               name: res.product.name || '',
-              category: res.product.category || 'Dry Fruit Sweets',
+              category: res.product.category || 'Kanjivaram Sarees',
               description: res.product.description || '',
               price: res.product.price || '',
               discountPrice: res.product.discountPrice || '',
               stock: res.product.stock || 25,
-              weightOptions: res.product.weightOptions || ['250g', '500g', '1kg'],
+              weightOptions: res.product.weightOptions || ['Standard Drape (6.3m)', 'With Unstitched Blouse', 'Custom Stitched Blouse'],
               images: res.product.images || [],
               ingredients: res.product.ingredients || '',
-              shelfLife: res.product.shelfLife || '15 Days',
+              shelfLife: res.product.shelfLife || 'Dry Clean Only',
               isVeg: res.product.isVeg !== false,
               pureGhee: res.product.pureGhee !== false,
               isFeatured: Boolean(res.product.isFeatured),
@@ -75,7 +77,7 @@ const AdminProductForm = () => {
         })
         .catch((err) => {
           console.error(err);
-          addToast('Could not load sweet for editing', 'error');
+          addToast('Could not load saree for editing', 'error');
         })
         .finally(() => setLoading(false));
     }
@@ -103,7 +105,7 @@ const AdminProductForm = () => {
       const finalImages = imageUrlInput.trim()
         ? [imageUrlInput.trim()]
         : formData.images.length > 0 ? formData.images : [
-          'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=800&q=80'
+          '/sarees/kanjivaram-1.jpg'
         ];
 
       const payload = {
@@ -117,19 +119,19 @@ const AdminProductForm = () => {
       if (isEdit) {
         const res = await adminAPI.updateProduct(id, payload);
         if (res.success) {
-          addToast(`Updated sweet "${formData.name}" successfully! ✨`);
+          addToast(`Updated saree "${formData.name}" successfully! ✨`);
           navigate('/admin/products');
         }
       } else {
         const res = await adminAPI.createProduct(payload);
         if (res.success) {
-          addToast(`Added new sweet "${formData.name}" to catalog! 🍬`);
+          addToast(`Added new saree "${formData.name}" to catalog! ✨`);
           navigate('/admin/products');
         }
       }
     } catch (err) {
       console.error(err);
-      addToast(err.message || 'Failed to save sweet product', 'error');
+      addToast(err.message || 'Failed to save saree drape', 'error');
     } finally {
       setLoading(false);
     }
@@ -149,10 +151,10 @@ const AdminProductForm = () => {
           </Link>
           <div>
             <h1 className="font-serif text-2xl font-extrabold text-[#4d0a13]">
-              {isEdit ? 'Edit Sweet Delicacy' : 'Add New Sweet to Catalog'}
+              {isEdit ? 'Edit Saree Details' : 'Add New Saree to Catalog'}
             </h1>
             <p className="text-xs text-gray-500 mt-0.5">
-              Enter recipe details, pricing per weight, ingredients, and stock quantity.
+              Enter drape weave details, pricing, fabric composition, and stock quantity.
             </p>
           </div>
         </div>
@@ -165,14 +167,14 @@ const AdminProductForm = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="text-xs font-bold text-gray-700 block mb-1">
-              Sweet Name *
+              Saree Name *
             </label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="e.g. Kaju Katli / Mysore Pak"
+              placeholder="e.g. Royal Maroon Kanjivaram Bridal Silk Saree"
               required
               className="w-full px-3.5 py-2.5 text-xs bg-[#fdfbf7] border border-gray-200 rounded-xl focus:outline-none focus:border-[#6b0f1a]"
             />
@@ -180,7 +182,7 @@ const AdminProductForm = () => {
 
           <div>
             <label className="text-xs font-bold text-gray-700 block mb-1">
-              Sweet Category *
+              Weave Category *
             </label>
             <select
               name="category"
@@ -198,14 +200,14 @@ const AdminProductForm = () => {
         {/* Description */}
         <div>
           <label className="text-xs font-bold text-gray-700 block mb-1">
-            Mouth-Watering Description *
+            Royal Drape Description *
           </label>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleChange}
             rows={3}
-            placeholder="Describe the texture, cow ghee aroma, flavor profile, and heritage..."
+            placeholder="Describe the silk weave, zari motif, pallu pattern, and heritage..."
             required
             className="w-full px-3.5 py-2 text-xs bg-[#fdfbf7] border border-gray-200 rounded-xl focus:outline-none focus:border-[#6b0f1a]"
           ></textarea>
@@ -215,14 +217,14 @@ const AdminProductForm = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div>
             <label className="text-xs font-bold text-gray-700 block mb-1">
-              Base Price (250g in ₹) *
+              Base Price (in ₹) *
             </label>
             <input
               type="number"
               name="price"
               value={formData.price}
               onChange={handleChange}
-              placeholder="e.g. 280"
+              placeholder="e.g. 18500"
               required
               min={1}
               className="w-full px-3.5 py-2.5 text-xs bg-[#fdfbf7] border border-gray-200 rounded-xl focus:outline-none focus:border-[#6b0f1a]"
@@ -238,7 +240,7 @@ const AdminProductForm = () => {
               name="discountPrice"
               value={formData.discountPrice}
               onChange={handleChange}
-              placeholder="e.g. 250 (optional)"
+              placeholder="e.g. 15999 (optional)"
               min={0}
               className="w-full px-3.5 py-2.5 text-xs bg-[#fdfbf7] border border-gray-200 rounded-xl focus:outline-none focus:border-[#6b0f1a]"
             />
@@ -246,14 +248,14 @@ const AdminProductForm = () => {
 
           <div>
             <label className="text-xs font-bold text-gray-700 block mb-1">
-              Inventory Stock (Boxes) *
+              Inventory Stock (Pieces / Drapes) *
             </label>
             <input
               type="number"
               name="stock"
               value={formData.stock}
               onChange={handleChange}
-              placeholder="e.g. 35"
+              placeholder="e.g. 25"
               required
               min={0}
               className="w-full px-3.5 py-2.5 text-xs bg-[#fdfbf7] border border-gray-200 rounded-xl focus:outline-none focus:border-[#6b0f1a]"
@@ -261,32 +263,32 @@ const AdminProductForm = () => {
           </div>
         </div>
 
-        {/* Ingredients & Shelf Life */}
+        {/* Fabric & Care */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="text-xs font-bold text-gray-700 block mb-1">
-              Key Ingredients
+              Fabric & Zari Composition
             </label>
             <input
               type="text"
               name="ingredients"
               value={formData.ingredients}
               onChange={handleChange}
-              placeholder="e.g. Goan Cashews (Kaju), Cow Desi Ghee, Sugar"
+              placeholder="e.g. Pure Mulberry Silk, Tested 24K Gold Zari"
               className="w-full px-3.5 py-2.5 text-xs bg-[#fdfbf7] border border-gray-200 rounded-xl focus:outline-none focus:border-[#6b0f1a]"
             />
           </div>
 
           <div>
             <label className="text-xs font-bold text-gray-700 block mb-1">
-              Shelf Life Duration
+              Care & Maintenance
             </label>
             <input
               type="text"
               name="shelfLife"
               value={formData.shelfLife}
               onChange={handleChange}
-              placeholder="e.g. 20 Days at room temperature"
+              placeholder="e.g. Dry Clean Only. Mulmul wrap preservation"
               className="w-full px-3.5 py-2.5 text-xs bg-[#fdfbf7] border border-gray-200 rounded-xl focus:outline-none focus:border-[#6b0f1a]"
             />
           </div>
@@ -307,11 +309,11 @@ const AdminProductForm = () => {
             />
           </div>
           <span className="text-[10px] text-gray-400 mt-1 block">
-            Paste a high-res image link of the sweet.
+            Paste a high-res image link of the saree.
           </span>
         </div>
 
-        {/* Toggles: Pure Ghee, 100% Veg, Featured, Bestseller, Festive */}
+        {/* Toggles: Silk Mark, 24K Zari, Featured, Bestseller, Festive */}
         <div className="pt-2 border-t border-gray-100 grid grid-cols-2 sm:grid-cols-3 gap-3">
           <label className="flex items-center gap-2 text-xs font-medium text-gray-800 cursor-pointer">
             <input
@@ -321,7 +323,7 @@ const AdminProductForm = () => {
               onChange={handleChange}
               className="w-4 h-4 rounded text-[#6b0f1a]"
             />
-            <span>100% Pure Desi Ghee</span>
+            <span>Silk Mark Certified</span>
           </label>
 
           <label className="flex items-center gap-2 text-xs font-medium text-gray-800 cursor-pointer">
@@ -332,7 +334,7 @@ const AdminProductForm = () => {
               onChange={handleChange}
               className="w-4 h-4 rounded text-[#6b0f1a]"
             />
-            <span>100% Vegetarian</span>
+            <span>Tested 24K Gold Zari</span>
           </label>
 
           <label className="flex items-center gap-2 text-xs font-medium text-gray-800 cursor-pointer">
@@ -354,7 +356,7 @@ const AdminProductForm = () => {
               onChange={handleChange}
               className="w-4 h-4 rounded text-[#6b0f1a]"
             />
-            <span>Bestseller Sweet</span>
+            <span>Bestseller Saree</span>
           </label>
 
           <label className="flex items-center gap-2 text-xs font-medium text-gray-800 cursor-pointer">
@@ -365,7 +367,7 @@ const AdminProductForm = () => {
               onChange={handleChange}
               className="w-4 h-4 rounded text-[#6b0f1a]"
             />
-            <span>Festival Special Delicacy</span>
+            <span>Bridal & Festive Special</span>
           </label>
         </div>
 
@@ -384,7 +386,7 @@ const AdminProductForm = () => {
             className="px-8 py-2.5 bg-[#6b0f1a] hover:bg-[#4d0a13] text-white text-xs font-bold rounded-xl shadow-lg transition-all flex items-center gap-2"
           >
             <Save className="w-4 h-4 text-[#d4af37]" />
-            <span>{loading ? 'Saving Sweet...' : (isEdit ? 'Save Changes' : 'Publish Sweet')}</span>
+            <span>{loading ? 'Saving Saree...' : (isEdit ? 'Save Changes' : 'Publish Saree')}</span>
           </button>
         </div>
 

@@ -37,12 +37,12 @@ const OrderSuccess = () => {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center">
         <div className="w-12 h-12 border-4 border-[#6b0f1a] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-sm font-semibold text-gray-500">Retrieving your sweet order receipt...</p>
+        <p className="text-sm font-semibold text-gray-500">Retrieving your saree order receipt...</p>
       </div>
     );
   }
 
-  const orderNum = order?.orderNumber || id || 'SM-ORDER';
+  const orderNum = order?.orderNumber || id || 'SS-ORDER';
 
   return (
     <div className="bg-[#fdfbf7] min-h-screen py-12">

@@ -30,12 +30,12 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
-    addToast('Your inquiry has been received! Our Sweet Concierge will contact you within 2 hours ✨');
+    addToast('Your inquiry has been received! Our Saree Concierge will contact you within 2 hours ✨');
     setFormData({
       name: '',
       email: '',
       phone: '',
-      inquiryType: 'Corporate & Festive Bulk Order',
+      inquiryType: 'Bridal Trousseau & Wedding Orders',
       message: ''
     });
   };
@@ -81,7 +81,7 @@ const Contact = () => {
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail className="w-4 h-4 text-[#6b0f1a] shrink-0" />
-                  <span>orders@sweetmagic.com / corporate@sweetmagic.com</span>
+                  <span>concierge@sareesundarii.com / bridal@sareesundarii.com</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Clock className="w-4 h-4 text-[#6b0f1a] shrink-0" />
@@ -192,10 +192,10 @@ const Contact = () => {
                   onChange={handleChange}
                   className="w-full px-3.5 py-2.5 text-xs bg-[#fdfbf7] border border-gray-200 rounded-xl focus:outline-none focus:border-[#6b0f1a]"
                 >
-                  <option value="Corporate & Festive Bulk Order">Corporate & Festive Bulk Order (50+ Boxes)</option>
-                  <option value="Wedding Sweets & Invitation Hampers">Wedding Sweets & Invitation Hampers</option>
+                  <option value="Bridal Trousseau & Wedding Orders">Bridal Trousseau & Wedding Bulk Orders</option>
+                  <option value="Custom Handloom Weaving & Blouse Styling">Custom Handloom Weaving & Blouse Styling</option>
                   <option value="Online Order Inquiry / Tracking">Online Order Inquiry / Tracking</option>
-                  <option value="Franchise & Retail Distribution">Franchise & Retail Distribution</option>
+                  <option value="Boutique & Retail Inquiries">Boutique & Retail Inquiries</option>
                   <option value="General Feedback">General Feedback & Suggestions</option>
                 </select>
               </div>
@@ -207,7 +207,7 @@ const Contact = () => {
                   value={formData.message}
                   onChange={handleChange}
                   rows={4}
-                  placeholder="Please mention your required quantity, target date, preferred sweets, or delivery city..."
+                  placeholder="Please mention your required drapes, event date, weave preferences, or delivery city..."
                   required
                   className="w-full px-3.5 py-2.5 text-xs bg-[#fdfbf7] border border-gray-200 rounded-xl focus:outline-none focus:border-[#6b0f1a]"
                 ></textarea>

@@ -24,10 +24,10 @@ const AdminLayout = () => {
       <div className="max-w-md mx-auto px-4 py-24 text-center space-y-4">
         <ShieldAlert className="w-16 h-16 text-red-500 mx-auto" />
         <h1 className="text-2xl font-bold font-serif text-[#4d0a13]">
-          Sweet Magic Shop Owners Portal
+          Saree Sundarii Admin Portal
         </h1>
         <p className="text-sm text-gray-500">
-          This portal is reserved for Sweet Magic shop owners and inventory managers.
+          This portal is reserved for Saree Sundarii boutique managers and inventory administrators.
         </p>
         <div className="flex gap-3 justify-center pt-2">
           <Link
@@ -55,14 +55,14 @@ const AdminLayout = () => {
       <header className="bg-[#4d0a13] text-[#fcedd8] border-b border-[#d4af37]/30 px-6 py-4 flex items-center justify-between shadow-md">
         <div className="flex items-center gap-4">
           <Link to="/admin" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-[#6b0f1a] border border-[#d4af37] flex items-center justify-center">
-              <span>🍬</span>
+            <div className="w-8 h-8 rounded-full bg-[#6b0f1a] border border-[#d4af37] flex items-center justify-center text-[#d4af37]">
+              <Crown className="w-4 h-4" />
             </div>
             <span className="font-serif text-xl font-bold tracking-tight text-white">
-              Sweet <span className="gold-gradient-text">Magic</span>
+              Saree <span className="gold-gradient-text">Sundarii</span>
             </span>
             <span className="text-[10px] bg-[#d4af37] text-[#4d0a13] px-2 py-0.5 rounded font-extrabold uppercase tracking-wider">
-              Shop Owners Hub
+              Boutique Admin Hub
             </span>
           </Link>
         </div>
@@ -83,7 +83,7 @@ const AdminLayout = () => {
               A
             </div>
             <span className="text-xs font-bold text-white hidden md:inline">
-              Sweet Magic Admin
+              Saree Sundarii Admin
             </span>
           </div>
 
@@ -123,7 +123,7 @@ const AdminLayout = () => {
                   : 'text-gray-600 hover:text-[#6b0f1a] hover:bg-[#f7f1e5]'
               }`}
             >
-              Manage Sweets Catalog
+              Manage Sarees Catalog
             </Link>
 
             <Link
@@ -134,7 +134,7 @@ const AdminLayout = () => {
                   : 'text-gray-600 hover:text-[#6b0f1a] hover:bg-[#f7f1e5]'
               }`}
             >
-              Manage Customer Orders
+              Manage Saree Orders
             </Link>
 
             <Link
@@ -154,7 +154,7 @@ const AdminLayout = () => {
             className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#d4af37] hover:bg-[#e5a93c] text-[#4d0a13] font-extrabold text-xs shadow transition-all whitespace-nowrap ml-4"
           >
             <PlusCircle className="w-3.5 h-3.5" />
-            <span>Add New Sweet</span>
+            <span>Add New Saree</span>
           </Link>
         </div>
       </div>

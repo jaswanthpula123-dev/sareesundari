@@ -1,21 +1,12 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useAuth } from './AuthContext';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { cartAPI } from '../services/api';
+import { useAuth } from './AuthContext';
 import { useToast } from './ToastContext';
 
 const CartContext = createContext(null);
 
-export const calculateWeightPrice = (basePrice, option) => {
-  const p = Number(basePrice) || 0;
-  if (!option || typeof option !== 'string') return p;
-  if (option === '250g') return p;
-  if (option === '1kg') return Math.round(p * 3.75);
-  if (option === '500g') return Math.round(p * 1.95);
-  // Saree Draping & Blouse Options
-  if (option.includes('Custom Stitched Blouse')) return p + 1200;
-  if (option.includes('Fall & Pico')) return p + 350;
-  // Standard or Unstitched Blouse
-  return p;
+export const calculateWeightPrice = (basePrice, weight) => {
+  return Number(basePrice) || 0;
 };
 
 export const CartProvider = ({ children }) => {
@@ -23,19 +14,19 @@ export const CartProvider = ({ children }) => {
   const { addToast } = useToast();
 
   const [items, setItems] = useState(() => {
-    const saved = localStorage.getItem('sweetmagic_cart_items') || localStorage.getItem('sundari_cart_items');
+    const saved = localStorage.getItem('sundari_cart_items');
     return saved ? JSON.parse(saved) : [];
   });
 
   const [coupon, setCoupon] = useState(() => {
-    const savedCoupon = localStorage.getItem('sweetmagic_coupon') || localStorage.getItem('sundari_coupon');
+    const savedCoupon = localStorage.getItem('sundari_coupon');
     return savedCoupon ? JSON.parse(savedCoupon) : null;
   });
 
   // Calculate totals
   const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-  const tax = Math.round(subtotal * 0.05); // 5% GST on sweets
-  const shipping = subtotal >= 499 || subtotal === 0 ? 0 : 49; // Free above ₹499
+  const tax = Math.round(subtotal * 0.05); // 5% GST on Handloom Silk
+  const shipping = subtotal >= 1999 || subtotal === 0 ? 0 : 150; // Free above ₹1,999
   
   let discountAmount = 0;
   if (coupon && subtotal > 0) {
@@ -46,14 +37,14 @@ export const CartProvider = ({ children }) => {
 
   // Sync to localStorage
   useEffect(() => {
-    localStorage.setItem('sweetmagic_cart_items', JSON.stringify(items));
+    localStorage.setItem('sundari_cart_items', JSON.stringify(items));
   }, [items]);
 
   useEffect(() => {
     if (coupon) {
-      localStorage.setItem('sweetmagic_coupon', JSON.stringify(coupon));
+      localStorage.setItem('sundari_coupon', JSON.stringify(coupon));
     } else {
-      localStorage.removeItem('sweetmagic_coupon');
+      localStorage.removeItem('sundari_coupon');
     }
   }, [coupon]);
 
@@ -70,7 +61,7 @@ export const CartProvider = ({ children }) => {
     }
   }, [isAuthenticated]);
 
-  const addToCart = async (product, quantity = 1, weight = '500g') => {
+  const addToCart = async (product, quantity = 1, weight = 'Standard (6.3m with Blouse)') => {
     if (!product) return;
     const qty = Math.max(1, Number(quantity));
     const prodId = product._id || product.productId;
@@ -82,7 +73,7 @@ export const CartProvider = ({ children }) => {
         const res = await cartAPI.addToCart(prodId, qty, weight);
         if (res.success && res.cart?.items) {
           setItems(res.cart.items);
-          addToast(`Added ${quantity}x "${product.name}" (${weight}) to your cart 🍬`);
+          addToast(`Added ${quantity}x "${product.name}" to your bag ✨`);
         }
       } catch (error) {
         addToast(error.message, 'error');
@@ -96,7 +87,7 @@ export const CartProvider = ({ children }) => {
         if (existingIndex > -1) {
           const newQty = prevItems[existingIndex].quantity + qty;
           if (product.stock && newQty > product.stock) {
-            addToast(`Only ${product.stock} boxes available in stock`, 'error');
+            addToast(`Only ${product.stock} pieces available on loom`, 'error');
             return prevItems;
           }
           const updated = [...prevItems];
@@ -105,14 +96,14 @@ export const CartProvider = ({ children }) => {
             quantity: newQty,
             price: weightPrice
           };
-          addToast(`Updated quantity of "${product.name}" (${weight}) in cart`);
+          addToast(`Updated quantity of "${product.name}" in bag`);
           return updated;
         } else {
           if (product.stock && qty > product.stock) {
-            addToast(`Only ${product.stock} boxes available in stock`, 'error');
+            addToast(`Only ${product.stock} pieces available on loom`, 'error');
             return prevItems;
           }
-          addToast(`Added "${product.name}" (${weight}) to your cart 🍬`);
+          addToast(`Added "${product.name}" to your bag ✨`);
           return [
             ...prevItems,
             {
@@ -121,13 +112,12 @@ export const CartProvider = ({ children }) => {
               name: product.name,
               slug: product.slug,
               image: product.images?.[0] || '/sarees/kanjivaram-1.jpg',
-              weight: weight || '500g',
-              basePrice: basePrice,
               price: weightPrice,
               originalPrice: product.price,
-              stock: product.stock || 20,
+              weight: weight,
               quantity: qty,
-              category: product.category
+              category: product.category,
+              stock: product.stock
             }
           ];
         }
@@ -135,11 +125,16 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const updateQuantity = async (productId, quantity, weight = '500g') => {
-    const qty = Number(quantity);
+  const updateQuantity = async (productId, newQuantity, weight) => {
+    const qty = Number(newQuantity);
+    if (qty <= 0) {
+      removeFromCart(productId, weight);
+      return;
+    }
+
     if (isAuthenticated) {
       try {
-        const res = await cartAPI.updateQuantity(productId, qty, weight, weight);
+        const res = await cartAPI.updateQuantity(productId, qty, weight);
         if (res.success && res.cart?.items) {
           setItems(res.cart.items);
         }
@@ -147,52 +142,32 @@ export const CartProvider = ({ children }) => {
         addToast(error.message, 'error');
       }
     } else {
-      setItems((prevItems) => {
-        if (qty <= 0) {
-          return prevItems.filter(item => 
-            !((item.productId || item._id).toString() === productId.toString() && item.weight === weight)
-          );
-        }
-        return prevItems.map(item => {
-          if ((item.productId || item._id).toString() === productId.toString() && item.weight === weight) {
+      setItems((prev) =>
+        prev.map((item) => {
+          const matchId = (item.productId || item._id).toString() === productId.toString();
+          const matchWeight = !weight || item.weight === weight;
+          if (matchId && matchWeight) {
             return { ...item, quantity: qty };
           }
           return item;
-        });
-      });
+        })
+      );
     }
   };
 
-  const updateWeight = async (productId, oldWeight, newWeight) => {
-    if (oldWeight === newWeight) return;
-
-    if (isAuthenticated) {
-      try {
-        const res = await cartAPI.updateQuantity(productId, undefined, newWeight, oldWeight);
-        if (res.success && res.cart?.items) {
-          setItems(res.cart.items);
-          addToast(`Updated weight to ${newWeight} ✨`);
+  const updateWeight = (productId, oldWeight, newWeight) => {
+    setItems((prev) =>
+      prev.map((item) => {
+        const matchId = (item.productId || item._id).toString() === productId.toString();
+        if (matchId && item.weight === oldWeight) {
+          return {
+            ...item,
+            weight: newWeight
+          };
         }
-      } catch (error) {
-        addToast(error.message, 'error');
-      }
-    } else {
-      setItems((prev) => {
-        return prev.map(item => {
-          if ((item.productId || item._id).toString() === productId.toString() && item.weight === oldWeight) {
-            const newPrice = calculateWeightPrice(item.basePrice || item.price, newWeight);
-            return {
-              ...item,
-              weight: newWeight,
-              price: newPrice,
-              _id: `${item.productId}_${newWeight}`
-            };
-          }
-          return item;
-        });
-      });
-      addToast(`Updated weight to ${newWeight} ✨`);
-    }
+        return item;
+      })
+    );
   };
 
   const removeFromCart = async (productId, weight) => {
@@ -201,7 +176,7 @@ export const CartProvider = ({ children }) => {
         const res = await cartAPI.removeItem(productId, weight);
         if (res.success && res.cart?.items) {
           setItems(res.cart.items);
-          addToast('Sweet removed from cart');
+          addToast('Saree removed from bag');
         }
       } catch (error) {
         addToast(error.message, 'error');
@@ -212,7 +187,7 @@ export const CartProvider = ({ children }) => {
         const matchWeight = !weight || item.weight === weight;
         return !(matchId && matchWeight);
       }));
-      addToast('Sweet removed from cart');
+      addToast('Saree removed from bag');
     }
   };
 
@@ -232,24 +207,24 @@ export const CartProvider = ({ children }) => {
     if (!code) return { success: false, message: 'Please enter a coupon code' };
     const clean = code.trim().toUpperCase();
 
-    if (clean === 'SWEET10' || clean === 'WELCOME10') {
-      const c = { code: clean, percentage: 10, desc: 'Sweet Welcome 10% Off' };
+    if (clean === 'SUNDARI20' || clean === 'MAGIC20') {
+      const c = { code: 'SUNDARI20', percentage: 20, desc: 'Festive Heritage 20% Off' };
       setCoupon(c);
-      addToast(`Coupon "${clean}" applied! Saved 10% 🎉`);
+      addToast('Coupon "SUNDARI20" applied! Saved 20% 🎉');
       return { success: true };
-    } else if (clean === 'MAGIC20') {
-      const c = { code: 'MAGIC20', percentage: 20, desc: 'Sweet Magic Festival 20% Off' };
+    } else if (clean === 'HERITAGE15' || clean === 'FESTIVE15') {
+      const c = { code: 'HERITAGE15', percentage: 15, desc: 'Heritage Vault 15% Off' };
       setCoupon(c);
-      addToast('Coupon "MAGIC20" applied! Saved 20% 🎉');
+      addToast('Coupon "HERITAGE15" applied! Saved 15% 🎉');
       return { success: true };
-    } else if (clean === 'FESTIVE15') {
-      const c = { code: 'FESTIVE15', percentage: 15, desc: 'Festive Season 15% Off' };
+    } else if (clean === 'ROYAL10' || clean === 'WELCOME10') {
+      const c = { code: 'ROYAL10', percentage: 10, desc: 'Royal Welcome 10% Off' };
       setCoupon(c);
-      addToast('Coupon "FESTIVE15" applied! Saved 15% 🎉');
+      addToast('Coupon "ROYAL10" applied! Saved 10% 🎉');
       return { success: true };
     } else {
-      addToast('Invalid coupon code. Try SWEET10 or MAGIC20', 'error');
-      return { success: false, message: 'Invalid or expired code. Try SWEET10 or MAGIC20' };
+      addToast('Invalid coupon code. Try SUNDARI20 or HERITAGE15', 'error');
+      return { success: false, message: 'Invalid or expired code. Try SUNDARI20 or HERITAGE15' };
     }
   };
 
@@ -258,35 +233,31 @@ export const CartProvider = ({ children }) => {
     addToast('Coupon removed');
   };
 
-  return (
-    <CartContext.Provider
-      value={{
-        items,
-        cartCount,
-        subtotal,
-        tax,
-        shipping,
-        discountAmount,
-        total,
-        coupon,
-        addToCart,
-        updateQuantity,
-        updateWeight,
-        removeFromCart,
-        clearCart,
-        applyCoupon,
-        removeCoupon
-      }}
-    >
-      {children}
-    </CartContext.Provider>
-  );
+  const value = {
+    items,
+    cartCount,
+    subtotal,
+    tax,
+    shipping,
+    discountAmount,
+    total,
+    coupon,
+    addToCart,
+    updateQuantity,
+    updateWeight,
+    removeFromCart,
+    clearCart,
+    applyCoupon,
+    removeCoupon
+  };
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };
 
 export const useCart = () => {
   const context = useContext(CartContext);
   if (!context) {
-    throw new Error('useCart must be used within CartProvider');
+    throw new Error('useCart must be used within a CartProvider');
   }
   return context;
 };

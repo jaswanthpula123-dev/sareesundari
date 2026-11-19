@@ -79,19 +79,19 @@ const Profile = () => {
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#d4af37]/30 shadow-sm space-y-6">
           <div className="flex items-center justify-between pb-4 border-b border-gray-100">
             <div>
-              <h2 className="font-serif text-xl font-bold text-[#4d0a13] flex items-center gap-2">
+              <h2 className="font-serif text-xl font-bold text-[#5B0E2D] flex items-center gap-2">
                 <Package className="w-5 h-5 text-[#d4af37]" />
-                Your Sweet Orders
+                Your Saree Orders
               </h2>
               <p className="text-xs text-gray-500 mt-0.5">
-                Track status and review your previous traditional mithai purchases
+                Track transit status and review your previous royal handloom purchases
               </p>
             </div>
             <Link
               to="/shop"
-              className="text-xs font-bold text-[#6b0f1a] hover:underline"
+              className="text-xs font-bold text-[#5B0E2D] hover:underline"
             >
-              Order More Sweets →
+              Order More Sarees →
             </Link>
           </div>
 
@@ -103,9 +103,9 @@ const Profile = () => {
               <p className="text-xs text-gray-500">You haven't placed any orders yet.</p>
               <Link
                 to="/shop"
-                className="inline-block px-6 py-2 bg-[#6b0f1a] text-white text-xs font-bold rounded-full shadow"
+                className="inline-block px-6 py-2 bg-[#5B0E2D] text-white text-xs font-bold rounded-full shadow hover:bg-[#38050c] transition-all"
               >
-                Browse Sweets Shop
+                Browse Saree Vault
               </Link>
             </div>
           ) : (

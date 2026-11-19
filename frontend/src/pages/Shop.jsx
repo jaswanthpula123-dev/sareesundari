@@ -9,31 +9,34 @@ import {
   RotateCcw,
   Sparkles,
   Award,
-  Check
+  Check,
+  Crown
 } from 'lucide-react';
 import ProductCard from '../components/product/ProductCard';
 import { productAPI, categoryAPI } from '../services/api';
 
 const categoriesList = [
   'All',
-  'Ghee Sweets',
-  'Dry Fruit Sweets',
-  'Bengali Sweets',
-  'Traditional Laddus',
-  'Milk Sweets',
-  'Festive Hampers'
+  'Kanjivaram Sarees',
+  'Banarasi Sarees',
+  'Silk Sarees',
+  'Cotton Sarees',
+  'Wedding Sarees',
+  'Party Wear Sarees',
+  'Designer Sarees',
+  'Georgette & Chiffon'
 ];
 
 const priceRanges = [
   { label: 'All Prices', min: '', max: '' },
-  { label: 'Under ₹200', min: '0', max: '200' },
-  { label: '₹200 - ₹300', min: '200', max: '300' },
-  { label: '₹300 - ₹500', min: '300', max: '500' },
-  { label: '₹500 & Above', min: '500', max: '5000' }
+  { label: 'Under ₹15,000', min: '0', max: '15000' },
+  { label: '₹15,000 - ₹25,000', min: '15000', max: '25000' },
+  { label: '₹25,000 - ₹35,000', min: '25000', max: '35000' },
+  { label: '₹35,000 & Above', min: '35000', max: '100000' }
 ];
 
 const sortOptions = [
-  { value: 'newest', label: 'Newest Arrivals' },
+  { value: 'newest', label: 'Newest Heirlooms' },
   { value: 'popular', label: 'Most Popular' },
   { value: 'rating', label: 'Highest Rated' },
   { value: 'price-asc', label: 'Price: Low to High' },
@@ -48,95 +51,68 @@ const Shop = () => {
   const [category, setCategory] = useState(searchParams.get('category') || 'All');
   const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') || '');
   const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '');
-  const [inStockOnly, setInStockOnly] = useState(searchParams.get('inStockOnly') === 'true');
-  const [pureGheeOnly, setPureGheeOnly] = useState(searchParams.get('pureGhee') === 'true');
+  const [inStockOnly, setInStockOnly] = useState(false);
+  const [silkMarkOnly, setSilkMarkOnly] = useState(false);
   const [sort, setSort] = useState(searchParams.get('sort') || 'newest');
 
+  // UI State
   const [products, setProducts] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
-  // Sync state when URL params change
   useEffect(() => {
-    const kw = searchParams.get('keyword') || '';
-    const cat = searchParams.get('category') || 'All';
-    const minP = searchParams.get('minPrice') || '';
-    const maxP = searchParams.get('maxPrice') || '';
-    const stock = searchParams.get('inStockOnly') === 'true';
-    const s = searchParams.get('sort') || 'newest';
+    fetchFilteredProducts();
+  }, [category, minPrice, maxPrice, inStockOnly, silkMarkOnly, sort]);
 
-    setKeyword(kw);
-    setCategory(cat);
-    setMinPrice(minP);
-    setMaxPrice(maxP);
-    setInStockOnly(stock);
-    setSort(s);
-
-    fetchProducts({ keyword: kw, category: cat, minPrice: minP, maxPrice: maxP, inStockOnly: stock, sort: s });
-  }, [searchParams]);
-
-  const fetchProducts = async (paramsObj) => {
+  const fetchFilteredProducts = async () => {
     try {
       setLoading(true);
-      const queryParams = {
-        keyword: paramsObj.keyword || undefined,
-        category: paramsObj.category !== 'All' ? paramsObj.category : undefined,
-        minPrice: paramsObj.minPrice || undefined,
-        maxPrice: paramsObj.maxPrice || undefined,
-        inStockOnly: paramsObj.inStockOnly || undefined,
-        pureGhee: paramsObj.pureGhee || undefined,
-        sort: paramsObj.sort || undefined
-      };
 
-      const res = await productAPI.getAll(queryParams);
-      if (res.success) {
-        setProducts(res.products || []);
-        setTotalCount(res.total || res.count || 0);
+      const params = {};
+      if (keyword.trim()) params.keyword = keyword.trim();
+      if (category && category !== 'All') params.category = category;
+      if (minPrice) params.minPrice = minPrice;
+      if (maxPrice) params.maxPrice = maxPrice;
+      if (inStockOnly) params.inStock = true;
+      if (silkMarkOnly) {
+        params.silkMark = true;
+        params.pureGhee = true; // backward compatibility
+      }
+      if (sort) params.sort = sort;
+
+      const res = await productAPI.getAll(params);
+
+      if (res.success && res.products) {
+        setProducts(res.products);
+        setTotalCount(res.totalCount || res.count || res.products.length);
       }
     } catch (err) {
-      console.error('Failed to fetch sweets:', err);
+      console.error('Failed to fetch sarees:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleFilterApply = (updates = {}) => {
-    const nextParams = new URLSearchParams(searchParams);
-
-    const merged = {
+  const handleFilterApply = (newValues = {}) => {
+    const updated = {
       keyword,
       category,
       minPrice,
       maxPrice,
-      inStockOnly,
-      pureGhee: pureGheeOnly,
       sort,
-      ...updates
+      ...newValues
     };
 
-    if (merged.keyword) nextParams.set('keyword', merged.keyword);
-    else nextParams.delete('keyword');
-
-    if (merged.category && merged.category !== 'All') nextParams.set('category', merged.category);
-    else nextParams.delete('category');
-
-    if (merged.minPrice) nextParams.set('minPrice', merged.minPrice);
-    else nextParams.delete('minPrice');
-
-    if (merged.maxPrice) nextParams.set('maxPrice', merged.maxPrice);
-    else nextParams.delete('maxPrice');
-
-    if (merged.inStockOnly) nextParams.set('inStockOnly', 'true');
-    else nextParams.delete('inStockOnly');
-
-    if (merged.pureGhee) nextParams.set('pureGhee', 'true');
-    else nextParams.delete('pureGhee');
-
-    if (merged.sort && merged.sort !== 'newest') nextParams.set('sort', merged.sort);
-    else nextParams.delete('sort');
+    const nextParams = new URLSearchParams();
+    if (updated.keyword) nextParams.set('keyword', updated.keyword);
+    if (updated.category && updated.category !== 'All') nextParams.set('category', updated.category);
+    if (updated.minPrice) nextParams.set('minPrice', updated.minPrice);
+    if (updated.maxPrice) nextParams.set('maxPrice', updated.maxPrice);
+    if (updated.sort) nextParams.set('sort', updated.sort);
 
     setSearchParams(nextParams);
+    fetchFilteredProducts();
     setMobileFilterOpen(false);
   };
 
@@ -146,31 +122,31 @@ const Shop = () => {
     setMinPrice('');
     setMaxPrice('');
     setInStockOnly(false);
-    setPureGheeOnly(false);
+    setSilkMarkOnly(false);
     setSort('newest');
     setSearchParams(new URLSearchParams());
   };
 
   const hasActiveFilters = Boolean(
-    keyword || (category && category !== 'All') || minPrice || maxPrice || inStockOnly || pureGheeOnly
+    keyword || (category && category !== 'All') || minPrice || maxPrice || inStockOnly || silkMarkOnly
   );
 
   return (
-    <div className="bg-[#fdfbf7] min-h-screen py-8">
+    <div className="bg-[#fdfbf7] min-h-screen py-8 w-full overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Breadcrumb & Title */}
         <div className="mb-8 border-b border-[#d4af37]/25 pb-6">
           <div className="text-xs text-gray-500 mb-1">
-            <span>Home</span> <span className="mx-1">/</span> <span className="text-[#6b0f1a] font-semibold">Shop Sweets</span>
+            <span>Home</span> <span className="mx-1">/</span> <span className="text-[#5B0E2D] font-semibold">Shop All Sarees</span>
           </div>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h1 className="font-serif text-3xl sm:text-4xl font-extrabold text-[#4d0a13]">
-                Traditional Indian Sweets
+              <h1 className="font-serif text-3xl sm:text-4xl font-extrabold text-[#5B0E2D]">
+                Royal Handloom Saree Vault
               </h1>
               <p className="text-sm text-gray-600 mt-1">
-                Showing {products.length} of {totalCount} authentic handcrafted delicacies
+                Showing {products.length} of {totalCount} authentic handcrafted sarees
               </p>
             </div>
 
@@ -178,7 +154,7 @@ const Shop = () => {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setMobileFilterOpen(true)}
-                className="lg:hidden flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-[#d4af37]/40 text-xs font-bold text-[#6b0f1a]"
+                className="lg:hidden flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white border border-[#d4af37]/40 text-xs font-bold text-[#5B0E2D]"
               >
                 <SlidersHorizontal className="w-4 h-4" />
                 <span>Filters {hasActiveFilters && '●'}</span>
@@ -192,7 +168,7 @@ const Shop = () => {
                     setSort(e.target.value);
                     handleFilterApply({ sort: e.target.value });
                   }}
-                  className="bg-white border border-[#d4af37]/40 rounded-xl px-3 py-2 text-xs font-semibold text-[#2b1f1d] focus:outline-none focus:border-[#6b0f1a]"
+                  className="bg-white border border-[#d4af37]/40 rounded-xl px-3 py-2 text-xs font-semibold text-[#2b1f1d] focus:outline-none focus:border-[#5B0E2D]"
                 >
                   {sortOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -205,7 +181,7 @@ const Shop = () => {
           </div>
         </div>
 
-        {/* Main Grid: Sidebar + Sweets Catalog */}
+        {/* Main Grid: Sidebar + Sarees Catalog */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           
           {/* Desktop Filter Sidebar */}
@@ -213,9 +189,9 @@ const Shop = () => {
             <div className="bg-white rounded-2xl p-5 border border-[#d4af37]/30 shadow-sm space-y-6">
               
               <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-                <span className="font-serif text-base font-bold text-[#4d0a13] flex items-center gap-2">
+                <span className="font-serif text-base font-bold text-[#5B0E2D] flex items-center gap-2">
                   <Filter className="w-4 h-4 text-[#d4af37]" />
-                  Filters
+                  Filter Sarees
                 </span>
                 {hasActiveFilters && (
                   <button
@@ -231,7 +207,7 @@ const Shop = () => {
               {/* Search By Name */}
               <div>
                 <label className="text-xs font-bold text-[#2b1f1d] block mb-2">
-                  Search Sweets
+                  Search Sarees
                 </label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -242,18 +218,18 @@ const Shop = () => {
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') handleFilterApply();
                     }}
-                    placeholder="Search name, e.g. Kaju..."
-                    className="w-full pl-9 pr-3 py-2 text-xs border border-gray-200 rounded-xl focus:outline-none focus:border-[#6b0f1a]"
+                    placeholder="Search weave, e.g. Kanjivaram..."
+                    className="w-full pl-9 pr-3 py-2 text-xs border border-gray-200 rounded-xl focus:outline-none focus:border-[#5B0E2D]"
                   />
                 </div>
               </div>
 
-              {/* Categories */}
+              {/* Category Filter */}
               <div>
                 <label className="text-xs font-bold text-[#2b1f1d] block mb-2">
-                  Category
+                  Weave Category
                 </label>
-                <div className="space-y-1.5">
+                <div className="space-y-1 max-h-56 overflow-y-auto pr-1">
                   {categoriesList.map((cat) => (
                     <button
                       key={cat}
@@ -262,10 +238,10 @@ const Shop = () => {
                         setCategory(cat);
                         handleFilterApply({ category: cat });
                       }}
-                      className={`w-full text-left px-3 py-1.5 text-xs font-medium rounded-lg transition-colors flex items-center justify-between ${
+                      className={`w-full text-left px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center justify-between ${
                         category === cat
-                          ? 'bg-[#6b0f1a] text-white font-bold'
-                          : 'text-[#2b1f1d] hover:bg-[#f7f1e5]'
+                          ? 'bg-[#5B0E2D] text-white font-bold'
+                          : 'text-gray-700 hover:bg-[#f7f1e5]'
                       }`}
                     >
                       <span>{cat}</span>
@@ -275,30 +251,30 @@ const Shop = () => {
                 </div>
               </div>
 
-              {/* Price Ranges */}
+              {/* Price Range Filter */}
               <div>
                 <label className="text-xs font-bold text-[#2b1f1d] block mb-2">
                   Price Range
                 </label>
-                <div className="space-y-1.5">
-                  {priceRanges.map((r, i) => {
-                    const isSelected = minPrice === r.min && maxPrice === r.max;
+                <div className="space-y-1">
+                  {priceRanges.map((range) => {
+                    const isSelected = minPrice === range.min && maxPrice === range.max;
                     return (
                       <button
-                        key={i}
+                        key={range.label}
                         type="button"
                         onClick={() => {
-                          setMinPrice(r.min);
-                          setMaxPrice(r.max);
-                          handleFilterApply({ minPrice: r.min, maxPrice: r.max });
+                          setMinPrice(range.min);
+                          setMaxPrice(range.max);
+                          handleFilterApply({ minPrice: range.min, maxPrice: range.max });
                         }}
-                        className={`w-full text-left px-3 py-1.5 text-xs font-medium rounded-lg transition-colors flex items-center justify-between ${
+                        className={`w-full text-left px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center justify-between ${
                           isSelected
-                            ? 'bg-[#6b0f1a] text-white font-bold'
-                            : 'text-[#2b1f1d] hover:bg-[#f7f1e5]'
+                            ? 'bg-[#5B0E2D] text-white font-bold'
+                            : 'text-gray-700 hover:bg-[#f7f1e5]'
                         }`}
                       >
-                        <span>{r.label}</span>
+                        <span>{range.label}</span>
                         {isSelected && <Check className="w-3.5 h-3.5 text-[#d4af37]" />}
                       </button>
                     );
@@ -306,39 +282,37 @@ const Shop = () => {
                 </div>
               </div>
 
-              {/* In-Stock & Pure Ghee Toggles */}
-              <div className="pt-2 border-t border-gray-100 space-y-3">
-                <label className="flex items-center gap-2.5 text-xs font-medium text-[#2b1f1d] cursor-pointer">
+              {/* Quality & Silk Mark Toggles */}
+              <div className="space-y-2 pt-2 border-t border-gray-100">
+                <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-gray-700">
                   <input
                     type="checkbox"
                     checked={inStockOnly}
-                    onChange={(e) => {
-                      setInStockOnly(e.target.checked);
-                      handleFilterApply({ inStockOnly: e.target.checked });
-                    }}
-                    className="w-4 h-4 rounded text-[#6b0f1a] focus:ring-[#6b0f1a]"
+                    onChange={(e) => setInStockOnly(e.target.checked)}
+                    className="rounded text-[#5B0E2D] focus:ring-[#5B0E2D]"
                   />
-                  <span>Show Available Products Only</span>
+                  <span>Ready Drapes Only</span>
                 </label>
 
-                <label className="flex items-center gap-2.5 text-xs font-medium text-[#2b1f1d] cursor-pointer">
+                <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-gray-700">
                   <input
                     type="checkbox"
-                    checked={pureGheeOnly}
-                    onChange={(e) => {
-                      setPureGheeOnly(e.target.checked);
-                      handleFilterApply({ pureGhee: e.target.checked });
-                    }}
-                    className="w-4 h-4 rounded text-[#6b0f1a] focus:ring-[#6b0f1a]"
+                    checked={silkMarkOnly}
+                    onChange={(e) => setSilkMarkOnly(e.target.checked)}
+                    className="rounded text-[#5B0E2D] focus:ring-[#5B0E2D]"
                   />
-                  <span>100% Pure Desi Ghee Only</span>
+                  <span className="flex items-center gap-1">
+                    <Award className="w-3.5 h-3.5 text-[#9a6f14]" />
+                    Silk Mark Certified Only
+                  </span>
                 </label>
               </div>
 
+              {/* Apply Button */}
               <button
                 type="button"
                 onClick={() => handleFilterApply()}
-                className="w-full py-2.5 bg-[#6b0f1a] hover:bg-[#4d0a13] text-white text-xs font-bold rounded-xl shadow transition-colors"
+                className="w-full py-2.5 bg-[#5B0E2D] hover:bg-[#38050c] text-white text-xs font-bold rounded-xl shadow transition-colors cursor-pointer"
               >
                 Apply Filters
               </button>
@@ -346,15 +320,15 @@ const Shop = () => {
             </div>
           </div>
 
-          {/* Sweets Grid View */}
+          {/* Sarees Grid View */}
           <div className="lg:col-span-3">
             
             {/* Active Filter Badges */}
             {hasActiveFilters && (
               <div className="flex flex-wrap items-center gap-2 mb-4 bg-[#fcedd8]/50 p-2.5 rounded-xl border border-[#d4af37]/30">
-                <span className="text-xs font-bold text-[#4d0a13]">Active:</span>
+                <span className="text-xs font-bold text-[#5B0E2D]">Active:</span>
                 {keyword && (
-                  <span className="bg-white px-2 py-0.5 rounded-md text-xs text-[#6b0f1a] border border-[#d4af37]/30 flex items-center gap-1">
+                  <span className="bg-white px-2 py-0.5 rounded-md text-xs text-[#5B0E2D] border border-[#d4af37]/30 flex items-center gap-1">
                     "{keyword}"
                     <button onClick={() => { setKeyword(''); handleFilterApply({ keyword: '' }); }}>
                       <X className="w-3 h-3" />
@@ -362,7 +336,7 @@ const Shop = () => {
                   </span>
                 )}
                 {category !== 'All' && (
-                  <span className="bg-white px-2 py-0.5 rounded-md text-xs text-[#6b0f1a] border border-[#d4af37]/30 flex items-center gap-1">
+                  <span className="bg-white px-2 py-0.5 rounded-md text-xs text-[#5B0E2D] border border-[#d4af37]/30 flex items-center gap-1">
                     {category}
                     <button onClick={() => { setCategory('All'); handleFilterApply({ category: 'All' }); }}>
                       <X className="w-3 h-3" />
@@ -370,7 +344,7 @@ const Shop = () => {
                   </span>
                 )}
                 {(minPrice || maxPrice) && (
-                  <span className="bg-white px-2 py-0.5 rounded-md text-xs text-[#6b0f1a] border border-[#d4af37]/30 flex items-center gap-1">
+                  <span className="bg-white px-2 py-0.5 rounded-md text-xs text-[#5B0E2D] border border-[#d4af37]/30 flex items-center gap-1">
                     ₹{minPrice || 0} - ₹{maxPrice || '∞'}
                     <button onClick={() => { setMinPrice(''); setMaxPrice(''); handleFilterApply({ minPrice: '', maxPrice: '' }); }}>
                       <X className="w-3 h-3" />
@@ -378,8 +352,8 @@ const Shop = () => {
                   </span>
                 )}
                 {inStockOnly && (
-                  <span className="bg-white px-2 py-0.5 rounded-md text-xs text-[#6b0f1a] border border-[#d4af37]/30 flex items-center gap-1">
-                    In Stock Only
+                  <span className="bg-white px-2 py-0.5 rounded-md text-xs text-[#5B0E2D] border border-[#d4af37]/30 flex items-center gap-1">
+                    Ready Drapes Only
                     <button onClick={() => { setInStockOnly(false); handleFilterApply({ inStockOnly: false }); }}>
                       <X className="w-3 h-3" />
                     </button>
@@ -408,16 +382,16 @@ const Shop = () => {
               </div>
             ) : products.length === 0 ? (
               <div className="bg-white rounded-2xl p-12 text-center border border-[#d4af37]/30 shadow-sm max-w-lg mx-auto my-12">
-                <span className="text-5xl block mb-3">🍬</span>
-                <h3 className="font-serif text-xl font-bold text-[#4d0a13] mb-1">
-                  No Sweets Match Your Filter
+                <Crown className="w-14 h-14 text-[#5B0E2D] mx-auto mb-3" />
+                <h3 className="font-serif text-xl font-bold text-[#5B0E2D] mb-1">
+                  No Sarees Match Your Filter
                 </h3>
                 <p className="text-sm text-gray-500 mb-6">
-                  Try adjusting your search terms, changing the category, or clearing filters.
+                  Try adjusting your search terms, selecting another weave category, or clearing filters.
                 </p>
                 <button
                   onClick={handleResetFilters}
-                  className="px-6 py-2.5 bg-[#6b0f1a] text-white text-xs font-bold rounded-full shadow"
+                  className="px-6 py-2.5 bg-[#5B0E2D] text-white text-xs font-bold rounded-full shadow hover:bg-[#38050c] transition-all cursor-pointer"
                 >
                   Reset All Filters
                 </button>
@@ -441,21 +415,21 @@ const Shop = () => {
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex justify-end">
           <div className="w-full max-w-xs bg-white h-full p-6 overflow-y-auto space-y-6">
             <div className="flex items-center justify-between pb-3 border-b border-gray-200">
-              <span className="font-serif text-lg font-bold text-[#4d0a13]">Filter Sweets</span>
+              <span className="font-serif text-lg font-bold text-[#5B0E2D]">Filter Sarees</span>
               <button onClick={() => setMobileFilterOpen(false)} className="p-1 text-gray-500">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div>
-              <label className="text-xs font-bold block mb-2">Category</label>
+              <label className="text-xs font-bold block mb-2">Weave Category</label>
               <div className="space-y-1">
                 {categoriesList.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setCategory(cat)}
                     className={`w-full text-left px-3 py-1.5 text-xs rounded-lg ${
-                      category === cat ? 'bg-[#6b0f1a] text-white font-bold' : 'hover:bg-gray-100'
+                      category === cat ? 'bg-[#5B0E2D] text-white font-bold' : 'hover:bg-gray-100'
                     }`}
                   >
                     {cat}
@@ -464,19 +438,29 @@ const Shop = () => {
               </div>
             </div>
 
-            <div className="space-y-2 pt-2 border-t border-gray-200">
-              <label className="flex items-center gap-2 text-xs font-medium">
-                <input
-                  type="checkbox"
-                  checked={inStockOnly}
-                  onChange={(e) => setInStockOnly(e.target.checked)}
-                  className="w-4 h-4 rounded text-[#6b0f1a]"
-                />
-                <span>Available Sweets Only</span>
-              </label>
+            <div>
+              <label className="text-xs font-bold block mb-2">Price Range</label>
+              <div className="space-y-1">
+                {priceRanges.map((range) => (
+                  <button
+                    key={range.label}
+                    onClick={() => {
+                      setMinPrice(range.min);
+                      setMaxPrice(range.max);
+                    }}
+                    className={`w-full text-left px-3 py-1.5 text-xs rounded-lg ${
+                      minPrice === range.min && maxPrice === range.max
+                        ? 'bg-[#5B0E2D] text-white font-bold'
+                        : 'hover:bg-gray-100'
+                    }`}
+                  >
+                    {range.label}
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="flex gap-2 pt-4">
+            <div className="pt-4 border-t border-gray-100 flex gap-2">
               <button
                 onClick={handleResetFilters}
                 className="flex-1 py-2.5 border border-gray-300 text-xs font-bold rounded-xl"
@@ -485,7 +469,7 @@ const Shop = () => {
               </button>
               <button
                 onClick={() => handleFilterApply()}
-                className="flex-1 py-2.5 bg-[#6b0f1a] text-white text-xs font-bold rounded-xl shadow"
+                className="flex-1 py-2.5 bg-[#5B0E2D] text-white text-xs font-bold rounded-xl shadow"
               >
                 Apply
               </button>
@@ -493,7 +477,6 @@ const Shop = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };

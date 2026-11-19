@@ -44,10 +44,10 @@ const Login = () => {
         
         {/* Brand Motif Header */}
         <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-full bg-[#6b0f1a] text-white flex items-center justify-center mx-auto shadow-md border-2 border-[#d4af37]">
-            <span className="text-2xl">🍬</span>
+          <div className="w-14 h-14 rounded-full bg-[#5B0E2D] text-white flex items-center justify-center mx-auto shadow-md border-2 border-[#d4af37]">
+            <span className="text-2xl">👑</span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-extrabold text-[#4d0a13]">
+          <h1 className="font-serif text-2xl sm:text-3xl font-extrabold text-[#5B0E2D]">
             Welcome Back to <span className="gold-gradient-text">Saree Sundarii</span>
           </h1>
           <p className="text-xs text-gray-500">
@@ -63,7 +63,7 @@ const Login = () => {
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
-              onClick={() => handleQuickLogin('customer@sweetmagic.com', 'customer123')}
+              onClick={() => handleQuickLogin('customer@sareesundarii.com', 'customer123')}
               className="py-2 px-2.5 rounded-xl bg-white hover:bg-[#f7f1e5] border border-[#d4af37]/40 text-xs font-bold text-[#6b0f1a] flex items-center justify-center gap-1.5 shadow-2xs transition-all"
             >
               <User className="w-3.5 h-3.5 text-[#d4af37]" />
@@ -72,7 +72,7 @@ const Login = () => {
 
             <button
               type="button"
-              onClick={() => handleQuickLogin('admin@sweetmagic.com', 'admin123')}
+              onClick={() => handleQuickLogin('admin@sareesundarii.com', 'admin123')}
               className="py-2 px-2.5 rounded-xl bg-[#6b0f1a] hover:bg-[#4d0a13] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow transition-all"
             >
               <Crown className="w-3.5 h-3.5 text-[#d4af37]" />

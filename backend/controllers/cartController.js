@@ -2,19 +2,18 @@ const Cart = require('../models/Cart');
 const Product = require('../models/Product');
 const { store } = require('../config/dataStore');
 
-// Calculate sweet price for weight
+// Calculate saree price for drape option
 const calculateWeightPrice = (basePrice, weight) => {
-  if (weight === '250g') return basePrice;
-  if (weight === '1kg') return Math.round(basePrice * 3.75);
-  // default 500g
-  return Math.round(basePrice * 1.95);
+  if (weight === 'With Unstitched Blouse') return Math.round(basePrice * 1.05);
+  if (weight === 'Custom Stitched Blouse') return Math.round(basePrice * 1.15);
+  return basePrice;
 };
 
 // Helper to calculate totals
 const calculateTotals = (items) => {
   const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-  const tax = Math.round(subtotal * 0.05); // 5% GST on sweets
-  const shipping = subtotal >= 499 || subtotal === 0 ? 0 : 49; // Free above ₹499
+  const tax = Math.round(subtotal * 0.05); // 5% GST on Handloom Silk
+  const shipping = subtotal >= 1999 || subtotal === 0 ? 0 : 150; // Free above ₹1,999
   const total = subtotal + tax + shipping;
 
   return { subtotal, tax, shipping, total };
@@ -109,7 +108,7 @@ const addToCart = async (req, res) => {
     if (global.__IS_MONGO_CONNECTED) {
       const product = await Product.findById(productId);
       if (!product) {
-        return res.status(404).json({ success: false, message: 'Sweet not found' });
+        return res.status(404).json({ success: false, message: 'Saree not found' });
       }
 
       const basePrice = product.discountPrice > 0 ? product.discountPrice : product.price;
@@ -154,7 +153,7 @@ const addToCart = async (req, res) => {
     } else {
       const product = store.products.find(p => p._id.toString() === productId.toString());
       if (!product) {
-        return res.status(404).json({ success: false, message: 'Sweet not found' });
+        return res.status(404).json({ success: false, message: 'Saree not found' });
       }
 
       const basePrice = product.discountPrice > 0 ? product.discountPrice : product.price;
@@ -214,7 +213,7 @@ const updateCartItem = async (req, res) => {
     if (global.__IS_MONGO_CONNECTED) {
       const product = await Product.findById(productId);
       if (!product) {
-        return res.status(404).json({ success: false, message: 'Sweet not found' });
+        return res.status(404).json({ success: false, message: 'Saree not found' });
       }
 
       let cart = await Cart.findOne({ user: req.user._id });
@@ -256,7 +255,7 @@ const updateCartItem = async (req, res) => {
     } else {
       const product = store.products.find(p => p._id.toString() === productId.toString());
       if (!product) {
-        return res.status(404).json({ success: false, message: 'Sweet not found' });
+        return res.status(404).json({ success: false, message: 'Saree not found' });
       }
 
       let cart = store.carts.find(c => c.user.toString() === req.user._id.toString());

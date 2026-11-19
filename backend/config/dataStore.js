@@ -17,7 +17,7 @@ const generateId = () => {
   return (timestamp + randomChars).substring(0, 24);
 };
 
-// Initialize in-memory store with seeded sweets data
+// Initialize in-memory store with seeded saree collection
 const initStore = async () => {
   if (store.products.length > 0) return;
 
@@ -51,158 +51,83 @@ const initStore = async () => {
     };
   });
 
-  // Seed sample customer reviews for authentic sweets
+  // Seed sample customer reviews for authentic handloom sarees
   if (store.users.length > 1 && store.products.length > 0) {
     const customer = store.users[1];
-    const kajuKatli = store.products.find(p => p.slug === 'kaju-katli') || store.products[0];
-    const motichoor = store.products.find(p => p.slug === 'motichoor-laddu') || store.products[1];
-    const mysorePak = store.products.find(p => p.slug === 'mysore-pak') || store.products[2];
+    const saree1 = store.products[0];
+    const saree2 = store.products[1] || store.products[0];
+    const saree3 = store.products[2] || store.products[0];
 
-    if (kajuKatli) {
+    if (saree1) {
       store.reviews.push({
         _id: generateId(),
         user: customer._id,
         userName: customer.name,
-        product: kajuKatli._id,
+        product: saree1._id,
         rating: 5,
-        title: 'Breathtaking pure Goan cashew melt & genuine silver vark!',
-        comment: 'Ordered Kaju Katli for Diwali puja. The diamond pieces are paper-thin, soft, not overly sweet, and melt right on the tongue. Truly royal quality!',
+        title: 'Breathtaking Kanjivaram bridal drape & genuine 24K gold zari!',
+        comment: 'Ordered for my wedding reception. The korvai border weaving is exquisite, pure mulberry silk feel, and the zari pallu gleams with unmatched royalty!',
         verifiedPurchase: true,
         createdAt: new Date(Date.now() - 86400000 * 4)
       });
     }
 
-    if (motichoor) {
+    if (saree2) {
       store.reviews.push({
         _id: generateId(),
         user: customer._id,
         userName: 'Pooja Deshmukh',
-        product: motichoor._id,
+        product: saree2._id,
         rating: 5,
-        title: 'Exquisite Desi Ghee pearls with saffron and pistachios',
-        comment: 'The laddus arrived in pristine airtight box packaging. You can smell the fragrant cow ghee as soon as you open it. Authentic Halwai mastery.',
+        title: 'Exquisite Banarasi Tanchoi with Silk Mark guarantee',
+        comment: 'The saree arrived in pristine archival box packaging with muslin wrapping. The zari work is feather-light and elegant. Truly master weaver craftsmanship.',
         verifiedPurchase: true,
         createdAt: new Date(Date.now() - 86400000 * 2)
       });
     }
 
-    if (mysorePak) {
-      store.reviews.push({
-        _id: generateId(),
-        user: customer._id,
-        userName: 'Suresh Rao',
-        product: mysorePak._id,
-        rating: 5,
-        title: 'Authentic royal Mysore porous texture and aroma',
-        comment: 'The honeycomb pores soaked in desi ghee take me straight back to childhood memories in Karnataka. Melt-in-the-mouth perfection!',
-        verifiedPurchase: true,
-        createdAt: new Date(Date.now() - 86400000 * 1)
-      });
-    }
-
-    const kajuPistaRoll = store.products.find(p => p.slug === 'royal-kaju-pista-roll');
-    if (kajuPistaRoll) {
-      store.reviews.push({
-        _id: generateId(),
-        user: customer._id,
-        userName: 'Vikramaditya Verma',
-        product: kajuPistaRoll._id,
-        rating: 5,
-        title: 'Heavenly cashew exterior and rich pistachio core!',
-        comment: 'The presentation with edible silver vark is stunning. The pistachio flavor inside is vibrant and nutty. Perfect gift for VIP corporate clients.',
-        verifiedPurchase: true,
-        createdAt: new Date(Date.now() - 86400000 * 3)
-      });
-    }
-
-    const anjeerBarfi = store.products.find(p => p.slug === 'sugar-free-anjeer-dry-fruit-barfi');
-    if (anjeerBarfi) {
+    if (saree3) {
       store.reviews.push({
         _id: generateId(),
         user: customer._id,
         userName: 'Meenakshi Sundaram',
-        product: anjeerBarfi._id,
+        product: saree3._id,
         rating: 5,
-        title: 'Guilt-free delight! Naturally sweet & super crunchy',
-        comment: 'My parents have sugar restrictions and this was a blessing! Zero refined sugar, loaded with crunchy almonds and figs. Will be ordering regularly.',
-        verifiedPurchase: true,
-        createdAt: new Date(Date.now() - 86400000 * 2)
-      });
-    }
-
-    const rosogolla = store.products.find(p => p.slug === 'kolkata-spongy-rosogolla');
-    if (rosogolla) {
-      store.reviews.push({
-        _id: generateId(),
-        user: customer._id,
-        userName: 'Debojyoti Sen',
-        product: rosogolla._id,
-        rating: 5,
-        title: 'Cloud-like sponginess! Truly authentic Kolkata taste',
-        comment: 'As a Bengali living in Bangalore, finding authentic spongy rosogolla is rare. Sweet Magic nails it—pure chhena, light syrup, and heavenly cardamom aroma!',
-        verifiedPurchase: true,
-        createdAt: new Date(Date.now() - 86400000 * 2)
-      });
-    }
-
-    const mishtiDoi = store.products.find(p => p.slug === 'traditional-matka-mishti-doi');
-    if (mishtiDoi) {
-      store.reviews.push({
-        _id: generateId(),
-        user: customer._id,
-        userName: 'Rituparna Chatterjee',
-        product: mishtiDoi._id,
-        rating: 5,
-        title: 'Thick, creamy and served in a real earthen pot',
-        comment: 'The caramelized flavor with subtle earthen claypot essence is perfection. Not overly sweet, perfectly thick. 10/10 recommendation!',
+        title: 'Authentic royal Chanderi tissue silk drape',
+        comment: 'Draped like a dream for festive celebrations. Soft, breathable, and opulent shine. Saree Sundarii is now my family favorite boutique!',
         verifiedPurchase: true,
         createdAt: new Date(Date.now() - 86400000 * 1)
       });
     }
 
-    const tirupatiLaddu = store.products.find(p => p.slug === 'sacred-tirupati-prasadam-laddu');
-    if (tirupatiLaddu) {
-      store.reviews.push({
-        _id: generateId(),
-        user: customer._id,
-        userName: 'Venkata Ramanujam',
-        product: tirupatiLaddu._id,
-        rating: 5,
-        title: 'Divinely authentic! Sacred camphor and rich cow ghee aroma',
-        comment: 'The taste is indistinguishable from the holy prasadam at the hill temple. Pure ghee, whole cashews, crunchy rock sugar. Brings back immense devotion.',
-        verifiedPurchase: true,
-        createdAt: new Date(Date.now() - 86400000 * 2)
-      });
-    }
-
-    // Seed sample initial order for Sweet Magic admin dashboard
+    // Seed sample initial order for Saree Sundarii admin dashboard
     const p1 = store.products[0];
-    const p2 = store.products[1];
+    const p2 = store.products[1] || store.products[0];
     const initialPrice = p1.discountPrice || p1.price;
     const p2Price = p2.discountPrice || p2.price;
     store.orders.push({
       _id: generateId(),
-      orderNumber: 'SM-202611-1001',
+      orderNumber: 'SS-202611-1001',
       user: customer._id,
       orderItems: [
         {
           product: p1._id,
           name: p1.name,
           image: p1.images[0],
-          weight: '500g',
+          weight: 'Standard Drape (6.3m)',
           price: initialPrice,
-          quantity: 2
+          quantity: 1
         },
         {
           product: p2._id,
           name: p2.name,
           image: p2.images[0],
-          weight: '1kg',
+          weight: 'With Unstitched Blouse',
           price: p2Price,
           quantity: 1
         }
       ],
-      shippingAddress: customer.addresses ? customer.addresses[0] : { street: '42 Sweet Confectionery Lane', city: 'Chennai', state: 'Tamil Nadu', zipCode: '600001', country: 'India' },
+      shippingAddress: customer.addresses ? customer.addresses[0] : { street: '14 Royal Silk Weaver Street', city: 'Chennai', state: 'Tamil Nadu', zipCode: '600001', country: 'India' },
       paymentMethod: 'Cash',
       paymentResult: {
         id: 'COD_PAY_1001',
@@ -210,12 +135,12 @@ const initStore = async () => {
         updateTime: new Date().toISOString(),
         emailAddress: customer.email
       },
-      itemsPrice: (initialPrice * 2) + p2Price,
-      taxPrice: Math.round(((initialPrice * 2) + p2Price) * 0.05),
+      itemsPrice: initialPrice + p2Price,
+      taxPrice: Math.round((initialPrice + p2Price) * 0.05),
       shippingPrice: 0,
-      discountAmount: 100,
-      totalPrice: ((initialPrice * 2) + p2Price) + Math.round(((initialPrice * 2) + p2Price) * 0.05) - 100,
-      couponApplied: 'SWEET10',
+      discountAmount: Math.round((initialPrice + p2Price) * 0.20),
+      totalPrice: (initialPrice + p2Price) + Math.round((initialPrice + p2Price) * 0.05) - Math.round((initialPrice + p2Price) * 0.20),
+      couponApplied: 'SUNDARI20',
       isPaid: false,
       paidAt: null,
       orderStatus: 'Confirmed',

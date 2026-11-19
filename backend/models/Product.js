@@ -19,11 +19,11 @@ const productSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      required: [true, 'Please specify sweet category']
+      required: [true, 'Please specify saree weave category']
     },
     price: {
       type: Number,
-      required: [true, 'Please enter base price (250g)'],
+      required: [true, 'Please enter base price'],
       min: [0, 'Price must be positive']
     },
     discountPrice: {
@@ -33,7 +33,7 @@ const productSchema = new mongoose.Schema(
     },
     weightOptions: {
       type: [String],
-      default: ['250g', '500g', '1kg']
+      default: ['Standard Drape (6.3m)', 'With Unstitched Blouse', 'Custom Stitched Blouse']
     },
     stock: {
       type: Number,
@@ -82,11 +82,11 @@ const productSchema = new mongoose.Schema(
     },
     shelfLife: {
       type: String,
-      default: '15 Days at room temperature'
+      default: 'Dry Clean Only'
     },
     ingredients: {
       type: String,
-      default: 'Pure Desi Ghee, Sugar, Saffron, Nuts'
+      default: '100% Pure Mulberry Silk, Tested 24K Gold Zari'
     }
   },
   {

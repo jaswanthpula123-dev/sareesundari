@@ -14,7 +14,8 @@ import {
   ChevronRight,
   Plus,
   Minus,
-  MessageSquare
+  MessageSquare,
+  Crown
 } from 'lucide-react';
 import { productAPI } from '../services/api';
 import { useCart, calculateWeightPrice } from '../context/CartContext';
@@ -65,7 +66,7 @@ const ProductDetail = () => {
           }
         }
       } catch (err) {
-        console.error('Error fetching sweet details:', err);
+        console.error('Error fetching saree details:', err);
       } finally {
         setLoading(false);
       }
@@ -78,8 +79,8 @@ const ProductDetail = () => {
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto px-4 py-16 text-center">
-        <div className="w-12 h-12 border-4 border-[#6b0f1a] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-sm font-semibold text-gray-500">Preparing fresh sweet details...</p>
+        <div className="w-12 h-12 border-4 border-[#5B0E2D] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-sm font-semibold text-gray-500">Preparing handcrafted saree details...</p>
       </div>
     );
   }
@@ -87,11 +88,11 @@ const ProductDetail = () => {
   if (!product) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-        <span className="text-5xl block mb-4">🍬</span>
-        <h2 className="font-serif text-2xl font-bold text-[#4d0a13] mb-2">Sweet Not Found</h2>
-        <p className="text-sm text-gray-600 mb-6">This delicacy might have sold out or was moved.</p>
-        <Link to="/shop" className="px-6 py-2.5 bg-[#6b0f1a] text-white text-xs font-bold rounded-full shadow">
-          Back to Sweets Shop
+        <Crown className="w-12 h-12 text-[#5B0E2D] mx-auto mb-4" />
+        <h2 className="font-serif text-2xl font-bold text-[#5B0E2D] mb-2">Heirloom Saree Not Found</h2>
+        <p className="text-sm text-gray-600 mb-6">This handloom drape might have been reserved or moved.</p>
+        <Link to="/shop" className="px-6 py-2.5 bg-[#5B0E2D] text-white text-xs font-bold rounded-full shadow hover:bg-[#38050c] transition-all">
+          Explore Saree Vault
         </Link>
       </div>
     );
@@ -156,15 +157,15 @@ const ProductDetail = () => {
         
         {/* Breadcrumb Navigation */}
         <nav className="flex items-center gap-1.5 text-xs text-gray-500 mb-8">
-          <Link to="/" className="hover:text-[#6b0f1a]">Home</Link>
+          <Link to="/" className="hover:text-[#5B0E2D]">Home</Link>
           <ChevronRight className="w-3.5 h-3.5" />
-          <Link to="/shop" className="hover:text-[#6b0f1a]">Shop Sweets</Link>
+          <Link to="/shop" className="hover:text-[#5B0E2D]">Shop All Sarees</Link>
           <ChevronRight className="w-3.5 h-3.5" />
-          <Link to={`/shop?category=${encodeURIComponent(product.category)}`} className="hover:text-[#6b0f1a]">
+          <Link to={`/shop?category=${encodeURIComponent(product.category)}`} className="hover:text-[#5B0E2D]">
             {product.category}
           </Link>
           <ChevronRight className="w-3.5 h-3.5" />
-          <span className="text-[#6b0f1a] font-semibold truncate max-w-xs">{product.name}</span>
+          <span className="text-[#5B0E2D] font-semibold truncate max-w-xs">{product.name}</span>
         </nav>
 
         {/* Product Hero Layout */}
@@ -226,17 +227,13 @@ const ProductDetail = () => {
                 <span className="text-xs uppercase font-extrabold text-[#9a6f14] tracking-wider bg-[#fcedd8] px-2.5 py-1 rounded-md">
                   {product.category}
                 </span>
-                {product.isVeg !== false && (
-                  <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
-                    <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
-                    100% Pure Veg
-                  </span>
-                )}
-                {product.pureGhee && (
-                  <span className="text-[11px] font-semibold text-[#6b0f1a] bg-[#fffaf3] border border-[#d4af37]/40 px-2 py-0.5 rounded-md">
-                    Pure Desi Cow Ghee
-                  </span>
-                )}
+                <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+                  <span className="w-2 h-2 rounded-full bg-emerald-600"></span>
+                  Silk Mark Certified
+                </span>
+                <span className="text-[11px] font-semibold text-[#6b0f1a] bg-[#fffaf3] border border-[#d4af37]/40 px-2 py-0.5 rounded-md">
+                  Tested 24K Gold Zari
+                </span>
               </div>
 
               {/* Product Title */}
@@ -384,28 +381,28 @@ const ProductDetail = () => {
 
         </div>
 
-        {/* Product Details & Ingredients Specs */}
+        {/* Product Details & Craftsmanship Specs */}
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#d4af37]/30 shadow-sm mb-12">
           <h2 className="font-serif text-xl font-bold text-[#4d0a13] mb-4">
-            Ingredients & Quality Standards
+            Fabric, Weave & Authenticity Specifications
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-4 rounded-2xl bg-[#fffaf3] border border-[#d4af37]/20">
-              <span className="text-xs font-bold text-[#9a6f14] block mb-1">Authentic Ingredients</span>
+              <span className="text-xs font-bold text-[#9a6f14] block mb-1">Weave & Purity</span>
               <p className="text-xs text-gray-700 leading-relaxed">
-                {product.ingredients || 'Goan Cashews, Cow Desi Ghee, Saffron, Organic Cane Sugar, Green Cardamom.'}
+                {product.ingredients || '100% Pure Mulberry Silk handwoven by generational master weavers with authentic Silk Mark certification.'}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-[#fffaf3] border border-[#d4af37]/20">
-              <span className="text-xs font-bold text-[#9a6f14] block mb-1">Storage & Shelf Life</span>
+              <span className="text-xs font-bold text-[#9a6f14] block mb-1">Drape Care & Longevity</span>
               <p className="text-xs text-gray-700 leading-relaxed">
-                {product.shelfLife || '15 Days at room temperature. Keep in an airtight container away from direct sunlight.'}
+                {product.shelfLife || 'Dry Clean Only. Preserve wrapped in unbleached mulmul cotton cloth to keep the zari luster radiant for decades.'}
               </p>
             </div>
             <div className="p-4 rounded-2xl bg-[#fffaf3] border border-[#d4af37]/20">
-              <span className="text-xs font-bold text-[#9a6f14] block mb-1">Packaging Hygiene</span>
+              <span className="text-xs font-bold text-[#9a6f14] block mb-1">Luxury Packaging</span>
               <p className="text-xs text-gray-700 leading-relaxed">
-                Packed in nitrogen-flushed, gold-embossed food-grade boxes to preserve maximum crispness, aroma, and freshness.
+                Delivered in an archival Saree Sundarii luxury box with satin ribbon, protective muslin sleeve, and Silk Mark authentication tag.
               </p>
             </div>
           </div>
@@ -437,7 +434,7 @@ const ProductDetail = () => {
             <div className="lg:col-span-7 space-y-4">
               {reviews.length === 0 ? (
                 <div className="p-8 text-center text-gray-400 text-sm">
-                  Be the first to review this mouth-watering sweet!
+                  Be the first to review this royal handloom drape!
                 </div>
               ) : (
                 reviews.map((r, i) => (
@@ -471,9 +468,9 @@ const ProductDetail = () => {
 
             {/* Leave a Review Form */}
             <div className="lg:col-span-5 bg-[#fffaf3] p-6 rounded-2xl border border-[#d4af37]/30">
-              <h3 className="font-serif text-base font-bold text-[#4d0a13] mb-3 flex items-center gap-2">
+              <h3 className="font-serif text-base font-bold text-[#5B0E2D] mb-3 flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-[#d4af37]" />
-                Write a Sweet Review
+                Share Your Experience / Review
               </h3>
 
               <form onSubmit={handleReviewSubmit} className="space-y-4">
@@ -506,7 +503,7 @@ const ProductDetail = () => {
                     type="text"
                     value={reviewTitle}
                     onChange={(e) => setReviewTitle(e.target.value)}
-                    placeholder="e.g. Unbelievably fresh and delicious!"
+                    placeholder="e.g. Magnificent zari work and regal drape!"
                     required
                     className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-[#6b0f1a]"
                   />
@@ -518,7 +515,7 @@ const ProductDetail = () => {
                     value={reviewComment}
                     onChange={(e) => setReviewComment(e.target.value)}
                     rows={3}
-                    placeholder="Tell us about the texture, ghee aroma, and taste..."
+                    placeholder="Tell us about the drape, silk texture, zari luster, and fitting..."
                     required
                     className="w-full px-3 py-2 text-xs bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-[#6b0f1a]"
                   ></textarea>
@@ -537,11 +534,11 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* Related Sweets Section */}
+        {/* Related Sarees Section */}
         {related.length > 0 && (
           <div className="mb-12">
-            <h2 className="font-serif text-2xl font-bold text-[#4d0a13] mb-6">
-              You Might Also Relish
+            <h2 className="font-serif text-2xl font-bold text-[#5B0E2D] mb-6">
+              Complementary Heirloom Drapes
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {related.map((item) => (

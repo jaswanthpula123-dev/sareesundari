@@ -37,13 +37,13 @@ const Register = () => {
         {/* Motif Header */}
         <div className="text-center space-y-2">
           <div className="w-14 h-14 rounded-full bg-[#6b0f1a] text-white flex items-center justify-center mx-auto shadow-md border-2 border-[#d4af37]">
-            <span className="text-2xl">🍬</span>
+            <span className="text-2xl">👑</span>
           </div>
-          <h1 className="font-serif text-2xl sm:text-3xl font-extrabold text-[#4d0a13]">
+          <h1 className="font-serif text-2xl sm:text-3xl font-extrabold text-[#5B0E2D]">
             Join <span className="gold-gradient-text">Saree Sundarii</span>
           </h1>
           <p className="text-xs text-gray-500">
-            Create an account to order fresh sweets and enjoy member discounts
+            Create an account to explore royal handloom drapes and enjoy exclusive member privileges
           </p>
         </div>
 

@@ -20,18 +20,18 @@ const Wishlist = () => {
           <Heart className="w-10 h-10 fill-current" />
         </div>
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold font-serif text-[#4d0a13]">
-            Your Sweet Wishlist is Empty
+          <h1 className="text-3xl font-bold font-serif text-[#5B0E2D]">
+            Your Saree Wishlist is Empty
           </h1>
           <p className="text-sm text-gray-500 max-w-md mx-auto">
-            Save the handcrafted delicacies and festive mithai boxes you love to order anytime.
+            Save the handcrafted heirloom drapes and bridal pattu sarees you love to cherish anytime.
           </p>
         </div>
         <Link
           to="/shop"
-          className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#6b0f1a] hover:bg-[#4d0a13] text-white font-bold text-xs rounded-full shadow-lg transition-all"
+          className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#5B0E2D] hover:bg-[#38050c] text-white font-bold text-xs rounded-full shadow-lg transition-all"
         >
-          <span>Explore Fresh Sweets</span>
+          <span>Explore Handloom Sarees</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
@@ -43,16 +43,16 @@ const Wishlist = () => {
       
       <div className="flex items-center justify-between pb-4 border-b border-[#d4af37]/30">
         <div>
-          <h1 className="text-3xl font-bold font-serif text-[#4d0a13]">
+          <h1 className="text-3xl font-bold font-serif text-[#5B0E2D]">
             Favorites & Wishlist
           </h1>
           <p className="text-xs text-gray-500 mt-1">
-            {wishlist.length} traditional sweets saved in your personal box
+            {wishlist.length} heirloom drapes saved in your personal collection
           </p>
         </div>
         <Link
           to="/shop"
-          className="text-xs font-semibold text-[#6b0f1a] hover:underline flex items-center gap-1"
+          className="text-xs font-semibold text-[#5B0E2D] hover:underline flex items-center gap-1"
         >
           <span>Continue Exploring</span>
           <ArrowRight className="w-3.5 h-3.5" />

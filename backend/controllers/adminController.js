@@ -166,7 +166,7 @@ const updateOrderStatus = async (req, res) => {
       order.statusHistory.push({
         status,
         timestamp: new Date(),
-        note: note || `Status changed to ${status} by sweet shop admin.`
+        note: note || `Status changed to ${status} by Saree Sundarii boutique admin.`
       });
 
       await order.save();
@@ -189,7 +189,7 @@ const updateOrderStatus = async (req, res) => {
       order.statusHistory.push({
         status,
         timestamp: new Date(),
-        note: note || `Status changed to ${status} by sweet shop admin.`
+        note: note || `Status changed to ${status} by Saree Sundarii boutique admin.`
       });
 
       return res.json({ success: true, message: `Order status updated to ${status}`, order });
@@ -199,7 +199,7 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
-// @desc    Create new sweet product
+// @desc    Create new saree product
 // @route   POST /api/admin/products
 // @access  Private/Admin
 const createProduct = async (req, res) => {
@@ -210,7 +210,7 @@ const createProduct = async (req, res) => {
       description,
       price,
       discountPrice,
-      weightOptions = ['250g', '500g', '1kg'],
+      weightOptions = ['Standard Drape (6.3m)', 'With Unstitched Blouse', 'Custom Stitched Blouse'],
       stock = 25,
       images,
       isFeatured = false,
@@ -218,8 +218,8 @@ const createProduct = async (req, res) => {
       isFestivalSpecial = false,
       pureGhee = true,
       isVeg = true,
-      shelfLife = '15 Days',
-      ingredients = 'Pure Desi Ghee, Sugar, Nuts'
+      shelfLife = 'Dry Clean Only',
+      ingredients = '100% Pure Mulberry Silk, Tested 24K Gold Zari'
     } = req.body;
 
     if (!name || !price || !category || !description) {
@@ -258,7 +258,7 @@ const createProduct = async (req, res) => {
         numReviews: 1
       });
 
-      return res.status(201).json({ success: true, message: 'Sweet created successfully!', product });
+      return res.status(201).json({ success: true, message: 'Saree created successfully!', product });
     } else {
       const finalSlug = `${slug}-${Date.now().toString().slice(-4)}`;
       const numStock = Number(stock) || 0;
@@ -291,14 +291,14 @@ const createProduct = async (req, res) => {
       };
 
       store.products.unshift(newProduct);
-      return res.status(201).json({ success: true, message: 'Sweet created successfully!', product: newProduct });
+      return res.status(201).json({ success: true, message: 'Saree created successfully!', product: newProduct });
     }
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// @desc    Update sweet product
+// @desc    Update saree product
 // @route   PUT /api/admin/products/:id
 // @access  Private/Admin
 const updateProduct = async (req, res) => {
@@ -314,13 +314,13 @@ const updateProduct = async (req, res) => {
     if (global.__IS_MONGO_CONNECTED) {
       const product = await Product.findByIdAndUpdate(id, updateData, { new: true, runValidators: true });
       if (!product) {
-        return res.status(404).json({ success: false, message: 'Sweet not found' });
+        return res.status(404).json({ success: false, message: 'Saree not found' });
       }
-      return res.json({ success: true, message: 'Sweet updated successfully!', product });
+      return res.json({ success: true, message: 'Saree updated successfully!', product });
     } else {
       const index = store.products.findIndex(p => p._id.toString() === id);
       if (index === -1) {
-        return res.status(404).json({ success: false, message: 'Sweet not found' });
+        return res.status(404).json({ success: false, message: 'Saree not found' });
       }
 
       store.products[index] = {
@@ -329,14 +329,14 @@ const updateProduct = async (req, res) => {
         updatedAt: new Date()
       };
 
-      return res.json({ success: true, message: 'Sweet updated successfully!', product: store.products[index] });
+      return res.json({ success: true, message: 'Saree updated successfully!', product: store.products[index] });
     }
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
-// @desc    Delete sweet product
+// @desc    Delete saree product
 // @route   DELETE /api/admin/products/:id
 // @access  Private/Admin
 const deleteProduct = async (req, res) => {
@@ -346,17 +346,17 @@ const deleteProduct = async (req, res) => {
     if (global.__IS_MONGO_CONNECTED) {
       const product = await Product.findByIdAndDelete(id);
       if (!product) {
-        return res.status(404).json({ success: false, message: 'Sweet not found' });
+        return res.status(404).json({ success: false, message: 'Saree not found' });
       }
-      return res.json({ success: true, message: 'Sweet removed from catalog' });
+      return res.json({ success: true, message: 'Saree removed from catalog' });
     } else {
       const index = store.products.findIndex(p => p._id.toString() === id);
       if (index === -1) {
-        return res.status(404).json({ success: false, message: 'Sweet not found' });
+        return res.status(404).json({ success: false, message: 'Saree not found' });
       }
 
       store.products.splice(index, 1);
-      return res.json({ success: true, message: 'Sweet removed from catalog' });
+      return res.json({ success: true, message: 'Saree removed from catalog' });
     }
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -415,7 +415,7 @@ const restockProduct = async (req, res) => {
 
     if (global.__IS_MONGO_CONNECTED) {
       const product = await Product.findById(id);
-      if (!product) return res.status(404).json({ success: false, message: 'Sweet not found' });
+      if (!product) return res.status(404).json({ success: false, message: 'Saree not found' });
 
       product.stock += Number(amount);
       product.availability = product.stock > 0 ? 'In Stock' : 'Out of Stock';
@@ -424,7 +424,7 @@ const restockProduct = async (req, res) => {
       return res.json({ success: true, message: `Restocked +${amount} boxes`, product });
     } else {
       const product = store.products.find(p => p._id.toString() === id);
-      if (!product) return res.status(404).json({ success: false, message: 'Sweet not found' });
+      if (!product) return res.status(404).json({ success: false, message: 'Saree not found' });
 
       product.stock += Number(amount);
       product.availability = product.stock > 0 ? 'In Stock' : 'Out of Stock';

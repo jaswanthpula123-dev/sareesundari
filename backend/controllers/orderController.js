@@ -3,11 +3,11 @@ const Product = require('../models/Product');
 const Cart = require('../models/Cart');
 const { store, generateId } = require('../config/dataStore');
 
-// Helper to generate readable Sweet Magic Order Number
+// Helper to generate readable Saree Sundarii Order Number
 const generateOrderNumber = () => {
   const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
   const randomNum = Math.floor(1000 + Math.random() * 9000);
-  return `SM-${dateStr}-${randomNum}`;
+  return `SS-${dateStr}-${randomNum}`;
 };
 
 // @desc    Create new order
@@ -78,7 +78,7 @@ const createOrder = async (req, res) => {
         ]
       });
 
-      // Update sweet stock
+      // Update saree stock
       for (const item of orderItems) {
         const prodId = item.product || item.productId;
         await Product.findByIdAndUpdate(prodId, {

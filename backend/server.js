@@ -37,21 +37,21 @@ if (process.env.NODE_ENV === 'development') {
 // Serve uploaded static files, authentic saree assets & legacy assets
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/sarees', express.static(path.join(__dirname, '../frontend/public/sarees')));
-app.use('/sweets', express.static(path.join(__dirname, '../frontend/public/sweets')));
+app.use('/sarees', express.static(path.join(__dirname, '../frontend/public/sarees')));
 
 // Root & Health check
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'online',
-    app: 'Sweet Magic API',
-    tagline: 'Pure Desi Ghee & Handcrafted Indian Sweets',
+    app: 'Saree Sundarii API',
+    tagline: 'Authentic Handloom Silk Sarees & Bridal Trousseau',
     timestamp: new Date().toISOString(),
     mongoConnected: Boolean(global.__IS_MONGO_CONNECTED)
   });
 });
 
 app.get('/', (req, res) => {
-  res.send('🍬 Sweet Magic – Full Stack Online Sweets Shop API is running gracefully.');
+  res.send('👑 Saree Sundarii – Full Stack Luxury Handloom Sarees Store API is running gracefully.');
 });
 
 // Mount Routes
@@ -77,7 +77,7 @@ const startServer = async () => {
 
     // 2. Start HTTP listener immediately
     const server = app.listen(PORT, () => {
-      console.log(`🍬 Sweet Magic Backend Server running on http://localhost:${PORT}`);
+      console.log(`👑 Saree Sundarii Backend Server running on http://localhost:${PORT}`);
     });
 
     // Keep event loop active indefinitely
@@ -94,7 +94,7 @@ const startServer = async () => {
 
           const count = await Product.countDocuments();
           if (count === 0) {
-            console.log('🌱 Seeding MongoDB database with initial Sweet Magic collection...');
+            console.log('🌱 Seeding MongoDB database with initial Saree Sundarii collection...');
             await Category.deleteMany({});
             await Product.deleteMany({});
             await User.deleteMany({});
@@ -103,14 +103,14 @@ const startServer = async () => {
             await Product.insertMany(productsData);
             const users = await getHashedUsers();
             await User.insertMany(users);
-            console.log('✅ MongoDB seeded successfully with sweets, categories and users.');
+            console.log('✅ MongoDB seeded successfully with sarees, categories and users.');
           }
         }
       }).catch(err => {
         console.warn('MongoDB background connection notice:', err.message);
       });
     } else {
-      console.log(`🚀 Sweet Magic High-Performance In-Memory Data Store is Active (41 Sweets, 6 Categories, Cart, Orders, Admin).`);
+      console.log(`🚀 Saree Sundarii High-Performance In-Memory Data Store is Active (Handloom Sarees, Categories, Cart, Orders, Admin).`);
     }
 
     return server;

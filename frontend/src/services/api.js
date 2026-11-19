@@ -12,7 +12,7 @@ const api = axios.create({
 // Auto attach JWT token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('sweetmagic_token') || localStorage.getItem('sundari_token');
+    const token = localStorage.getItem('sundari_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -41,7 +41,7 @@ export const authAPI = {
   toggleWishlist: (productId) => api.post('/auth/wishlist/toggle', { productId })
 };
 
-// Sweet Product APIs
+// Saree Product APIs
 export const productAPI = {
   getAll: (params) => api.get('/products', { params }),
   getByIdOrSlug: (idOrSlug) => api.get(`/products/${idOrSlug}`),

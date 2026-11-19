@@ -48,7 +48,7 @@ const AdminOrders = () => {
     try {
       const res = await adminAPI.updateOrderStatus(orderId, {
         status: newStatus,
-        note: `Status updated to ${newStatus} by Sweet Magic store owner.`
+        note: `Status updated to ${newStatus} by Saree Sundarii boutique manager.`
       });
 
       if (res.success) {
@@ -70,10 +70,10 @@ const AdminOrders = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#d4af37]/20">
         <div>
           <h1 className="font-serif text-2xl sm:text-3xl font-extrabold text-[#4d0a13]">
-            Customer Sweet Orders
+            Customer Saree Orders
           </h1>
           <p className="text-xs text-gray-500 mt-0.5">
-            Track kitchen preparation, delivery dispatches, and doorstep cash payments.
+            Track handloom weaving, boutique packaging dispatches, and doorstep payments.
           </p>
         </div>
       </div>
@@ -98,7 +98,7 @@ const AdminOrders = () => {
       {/* Orders Table */}
       <div className="bg-white rounded-3xl border border-[#d4af37]/30 shadow-sm overflow-hidden">
         {loading ? (
-          <div className="py-20 text-center text-xs text-gray-400">Loading sweet orders...</div>
+          <div className="py-20 text-center text-xs text-gray-400">Loading saree orders...</div>
         ) : orders.length === 0 ? (
           <div className="py-16 text-center text-xs text-gray-400">No orders found for status: {statusFilter}</div>
         ) : (
@@ -108,7 +108,7 @@ const AdminOrders = () => {
                 <tr>
                   <th className="py-3 px-4">Order ID & Date</th>
                   <th className="py-3 px-4">Customer</th>
-                  <th className="py-3 px-4">Sweets Ordered</th>
+                  <th className="py-3 px-4">Sarees Ordered</th>
                   <th className="py-3 px-4">Total & Payment</th>
                   <th className="py-3 px-4">Current Status</th>
                   <th className="py-3 px-4 text-right">Action</th>
@@ -144,12 +144,12 @@ const AdminOrders = () => {
                         </div>
                       </td>
 
-                      {/* Sweets items */}
+                      {/* Saree items */}
                       <td className="py-3 px-4">
                         <div className="space-y-1 max-w-xs">
                           {order.orderItems?.map((it, idx) => (
                             <div key={idx} className="text-[11px] text-gray-700 truncate">
-                              <strong>{it.name}</strong> ({it.weight || '500g'}) × {it.quantity}
+                              <strong>{it.name}</strong> ({it.weight || 'Standard Drape'}) × {it.quantity}
                             </div>
                           ))}
                         </div>
@@ -231,13 +231,13 @@ const AdminOrders = () => {
 
             {/* Items list */}
             <div className="space-y-2">
-              <span className="font-bold text-xs text-gray-700 block">Sweets in this Box:</span>
+              <span className="font-bold text-xs text-gray-700 block">Sarees in this Order:</span>
               <div className="divide-y divide-gray-100 border border-gray-100 rounded-2xl p-3 bg-white">
                 {selectedOrder.orderItems?.map((it, idx) => (
                   <div key={idx} className="py-2 flex items-center justify-between text-xs">
                     <div>
                       <div className="font-bold text-gray-800">{it.name}</div>
-                      <div className="text-[10px] text-gray-500">Weight: {it.weight || '500g'} × {it.quantity}</div>
+                      <div className="text-[10px] text-gray-500">Drape: {it.weight || 'Standard Drape'} × {it.quantity}</div>
                     </div>
                     <div className="font-black text-[#6b0f1a]">
                       ₹{(it.price * it.quantity).toLocaleString('en-IN')}

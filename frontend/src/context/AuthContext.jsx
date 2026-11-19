@@ -6,10 +6,10 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('sweetmagic_user') || localStorage.getItem('sundari_user');
+    const savedUser = localStorage.getItem('sundari_user');
     return savedUser ? JSON.parse(savedUser) : null;
   });
-  const [token, setToken] = useState(() => localStorage.getItem('sweetmagic_token') || localStorage.getItem('sundari_token') || null);
+  const [token, setToken] = useState(() => localStorage.getItem('sundari_token') || null);
   const [loading, setLoading] = useState(true);
   const { addToast } = useToast();
 
@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
           const res = await authAPI.getProfile();
           if (res.success && res.user) {
             setUser(res.user);
-            localStorage.setItem('sweetmagic_user', JSON.stringify(res.user));
+            localStorage.setItem('sundari_user', JSON.stringify(res.user));
           }
         } catch (error) {
           console.warn('Session expired or invalid token:', error.message);
@@ -39,9 +39,9 @@ export const AuthProvider = ({ children }) => {
       if (res.success) {
         setUser(res.user);
         setToken(res.token);
-        localStorage.setItem('sweetmagic_token', res.token);
-        localStorage.setItem('sweetmagic_user', JSON.stringify(res.user));
-        addToast(`Welcome back, ${res.user.name}! Enjoy fresh traditional sweets 🍬`);
+        localStorage.setItem('sundari_token', res.token);
+        localStorage.setItem('sundari_user', JSON.stringify(res.user));
+        addToast(`Welcome back, ${res.user.name}! Enjoy exploring royal handloom drapes ✨`);
         return { success: true };
       }
     } catch (error) {
@@ -56,9 +56,9 @@ export const AuthProvider = ({ children }) => {
       if (res.success) {
         setUser(res.user);
         setToken(res.token);
-        localStorage.setItem('sweetmagic_token', res.token);
-        localStorage.setItem('sweetmagic_user', JSON.stringify(res.user));
-        addToast(`Welcome to Sweet Magic, ${res.user.name}! Your account has been created.`);
+        localStorage.setItem('sundari_token', res.token);
+        localStorage.setItem('sundari_user', JSON.stringify(res.user));
+        addToast(`Welcome to Saree Sundarii, ${res.user.name}! Your account has been created.`);
         return { success: true };
       }
     } catch (error) {
@@ -70,12 +70,10 @@ export const AuthProvider = ({ children }) => {
   const logout = (showToast = true) => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem('sweetmagic_token');
-    localStorage.removeItem('sweetmagic_user');
     localStorage.removeItem('sundari_token');
     localStorage.removeItem('sundari_user');
     if (showToast) {
-      addToast('You have been logged out gracefully. Visit Sweet Magic again!');
+      addToast('You have been logged out gracefully. Visit Saree Sundarii again!');
     }
   };
 
@@ -84,7 +82,7 @@ export const AuthProvider = ({ children }) => {
       const res = await authAPI.updateProfile(userData);
       if (res.success) {
         setUser(res.user);
-        localStorage.setItem('sweetmagic_user', JSON.stringify(res.user));
+        localStorage.setItem('sundari_user', JSON.stringify(res.user));
         addToast('Profile updated successfully.');
         return { success: true };
       }
@@ -100,7 +98,7 @@ export const AuthProvider = ({ children }) => {
         const res = await authAPI.getProfile();
         if (res.success && res.user) {
           setUser(res.user);
-          localStorage.setItem('sweetmagic_user', JSON.stringify(res.user));
+          localStorage.setItem('sundari_user', JSON.stringify(res.user));
         }
       } catch (err) {
         console.error(err);
@@ -108,30 +106,26 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        token,
-        isAuthenticated: !!user,
-        isAdmin: user?.role === 'admin',
-        loading,
-        login,
-        register,
-        logout,
-        updateProfile,
-        refreshUser
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = {
+    user,
+    token,
+    loading,
+    isAuthenticated: Boolean(user && token),
+    isAdmin: Boolean(user?.role === 'admin'),
+    login,
+    register,
+    logout,
+    updateProfile,
+    refreshUser
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };

@@ -2,7 +2,7 @@ const Product = require('../models/Product');
 const Review = require('../models/Review');
 const { store, generateId } = require('../config/dataStore');
 
-// @desc    Get all sweets with search, filter, sort & pagination
+// @desc    Get all sarees with search, filter, sort & pagination
 // @route   GET /api/products
 // @access  Public
 const getAllProducts = async (req, res) => {
@@ -143,7 +143,7 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-// @desc    Get single sweet by slug or ID
+// @desc    Get single saree by slug or ID
 // @route   GET /api/products/:slugOrId
 // @access  Public
 const getProductBySlugOrId = async (req, res) => {
@@ -160,7 +160,7 @@ const getProductBySlugOrId = async (req, res) => {
       }
 
       if (!product) {
-        return res.status(404).json({ success: false, message: 'Sweet not found in catalog' });
+        return res.status(404).json({ success: false, message: 'Saree not found in catalog' });
       }
 
       const reviews = await Review.find({ product: product._id }).sort({ createdAt: -1 });
@@ -180,7 +180,7 @@ const getProductBySlugOrId = async (req, res) => {
       const product = store.products.find(p => p._id.toString() === slugOrId || p.slug === slugOrId);
 
       if (!product) {
-        return res.status(404).json({ success: false, message: 'Sweet not found in catalog' });
+        return res.status(404).json({ success: false, message: 'Saree not found in catalog' });
       }
 
       const reviews = store.reviews.filter(r => r.product.toString() === product._id.toString());
@@ -200,7 +200,7 @@ const getProductBySlugOrId = async (req, res) => {
   }
 };
 
-// @desc    Add review to sweet
+// @desc    Add review to saree
 // @route   POST /api/products/:id/reviews
 // @access  Private
 const createProductReview = async (req, res) => {
@@ -211,7 +211,7 @@ const createProductReview = async (req, res) => {
     if (global.__IS_MONGO_CONNECTED) {
       const product = await Product.findById(productId);
       if (!product) {
-        return res.status(404).json({ success: false, message: 'Sweet not found' });
+        return res.status(404).json({ success: false, message: 'Saree not found' });
       }
 
       const alreadyReviewed = await Review.findOne({
@@ -220,7 +220,7 @@ const createProductReview = async (req, res) => {
       });
 
       if (alreadyReviewed) {
-        return res.status(400).json({ success: false, message: 'You have already reviewed this sweet' });
+        return res.status(400).json({ success: false, message: 'You have already reviewed this saree' });
       }
 
       const review = await Review.create({
@@ -247,7 +247,7 @@ const createProductReview = async (req, res) => {
     } else {
       const product = store.products.find(p => p._id.toString() === productId);
       if (!product) {
-        return res.status(404).json({ success: false, message: 'Sweet not found' });
+        return res.status(404).json({ success: false, message: 'Saree not found' });
       }
 
       const alreadyReviewed = store.reviews.find(
@@ -255,7 +255,7 @@ const createProductReview = async (req, res) => {
       );
 
       if (alreadyReviewed) {
-        return res.status(400).json({ success: false, message: 'You have already reviewed this sweet' });
+        return res.status(400).json({ success: false, message: 'You have already reviewed this saree' });
       }
 
       const newReview = {
@@ -287,7 +287,7 @@ const createProductReview = async (req, res) => {
   }
 };
 
-// @desc    Get featured sweets
+// @desc    Get featured sarees
 // @route   GET /api/products/filter/featured
 // @access  Public
 const getFeaturedProducts = async (req, res) => {
@@ -304,7 +304,7 @@ const getFeaturedProducts = async (req, res) => {
   }
 };
 
-// @desc    Get best seller sweets
+// @desc    Get best seller sarees
 // @route   GET /api/products/filter/bestsellers
 // @access  Public
 const getBestSellers = async (req, res) => {
@@ -321,7 +321,7 @@ const getBestSellers = async (req, res) => {
   }
 };
 
-// @desc    Get festival special sweets
+// @desc    Get festival special sarees
 // @route   GET /api/products/filter/festivalspecial
 // @access  Public
 const getFestivalSpecials = async (req, res) => {
